@@ -16,14 +16,15 @@ void main()
 	Coord mouse;
 	char a;
 	SetSVGAMode(0x114);
-	//SetScreenWidth(1600l);
+	SetScreenWidth(1600l);
 	// SetShowBegin(1200,0);
 	//SetScreenWidth() ;
 	//PrintHZ16(400,0,"点击按键选择地图，点击地图进入预览模式",0x8972,1,1);     
 	//delay(5000)      ;
 	ReadBmp(0,0,"enter.bmp");
-	//ReadBmp(800,0,"jm3.bmp");
-	//SetShowBegin(1200,0);
+	ReadBmp(800,0,"jm3.bmp");
+	SetShowBegin(400,0);
+	PrintHZ16(400,0,"点击按键选择地图，点击地图进入预览模式",0x8972,1,1);
 	delay(5000);
 	//PrintHZ16(400,0,"点击按键选择地图，点击地图进入预览模式",0x8972,1,1); 
 	

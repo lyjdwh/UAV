@@ -302,7 +302,8 @@ char ReadBmp(int x,int y,char *FileName)
 		fread(buffer,width*2+k,1,fp); 								//读取一行像素点的信息
         for(j=0;j<width;j++)     									//把读取的一行像素点显示出来
         {
-			pos=((i+y)*800l+j+x);									/*计算要显示点的显示位置POSITION*/
+			//pos=((i+y)*800l+j+x);
+			pos=((i+y)*1600l+j+x);									/*计算要显示点的显示位置POSITION*/
             new_page=pos>>15;										/*计算显示页*/
 			pos=pos&0x0000ffffl;									/*计算在一个页面上的偏移位置，整除65536的快速方案*/
             if(new_page!=old_page)//换页
