@@ -153,14 +153,14 @@ void MouseCopy(Coord *CoordXY,char *mouse_buffer)
 	unsigned long pos;
 	short far * video_buffer=(short far *)0xA0000000L;
 	int old_page,new_page;
-	old_page=((CoordXY->y)*8001+CoordXY->x)>>15;
+	old_page=((CoordXY->y)*1600L+CoordXY->x)>>15;
 	new_page=old_page;
 	SelectPage(new_page);
 	for(i=0;i<16;i++)
 	{
 		for(j=0;j<16;j++)
 		{
-			pos=((CoordXY->y+i)*8001+CoordXY->x+j);
+			pos=((CoordXY->y+i)*1600L+CoordXY->x+j);
 			new_page=pos>>15;
 			if(old_page!=new_page)
 			{
@@ -184,14 +184,14 @@ void MouseReshow(Coord *CoordXY,char *mouse_buffer)
     char old_page,new_page;
     unsigned long pos;
     short far *video_buffer=(short far *)0xA0000000L;
-	old_page=((CoordXY->y)*8001+(CoordXY->x))/32768;
+	old_page=((CoordXY->y)*1600L+(CoordXY->x))/32768;
     new_page=old_page;
 	SelectPage(old_page);
 	for(i=0;i<16;i++)
 	{
         for(j=0;j<16;j++)
         {
-			pos=(i+(CoordXY->y))*8001+j+(CoordXY->x);
+			pos=(i+(CoordXY->y))*1600L+j+(CoordXY->x);
             new_page=pos>>15;
             if(old_page!=new_page)
             {
@@ -214,14 +214,14 @@ void MouseShow(Coord *CoordXY)
 	short far *video_buffer=(short far *)0xA0000000L;
 	char new_page,old_page;
 	unsigned long pos;
-	old_page=((CoordXY->y)*8001+(CoordXY->x))>>15;
+	old_page=((CoordXY->y)*1600L+(CoordXY->x))>>15;
     new_page=old_page;
 	SelectPage(old_page);
     for(i=0;i<16;i++)
     {
         for(j=0;j<16;j++)
         {
-			pos=(i+(CoordXY->y))*8001+j+(CoordXY->x);
+			pos=(i+(CoordXY->y))*1600L+j+(CoordXY->x);
             new_page=pos>>15;
             if(old_page!=new_page)
             {
@@ -234,4 +234,5 @@ void MouseShow(Coord *CoordXY)
 				video_buffer[pos&0x0000ffffl]=0;
         }
     }
+    delay(15);
 }
