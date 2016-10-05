@@ -11,7 +11,7 @@ void YLine(int x,int y,int length, int color);
 unsigned char SetSVGAMode(unsigned int mode);
 unsigned char GetSVGAMode();
 unsigned int SelectPage(unsigned char index);
-void ReturnMode();
+void ReturnMode() ; 
 char ReadBmp(int x,int y,char *FileName);
 void SetScreenWidth(unsigned pixels);
 void SetShowBegin(int x,int y) ;

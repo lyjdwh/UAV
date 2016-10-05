@@ -26,7 +26,7 @@ void  PutPixel(int  x,int  y,short color)
 	long pos;
 	short far *video_buffer=(short far *)0xA0000000L;
 	register new_page=0;
-	pos = y* 16001 + x;
+	pos = y* 1600L + x;
 	new_page = pos >>15;
 	pos = pos& 0x0000ffffL;
 	SelectPage(new_page);
@@ -200,7 +200,7 @@ unsigned char GetSVGAMode()
 	参数说明：index，页面号
 	返回值说明：0
 *******************************************************/
-
+/
 unsigned int SelectPage(unsigned char index)
 {
 	union REGS in,out;

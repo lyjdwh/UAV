@@ -38,17 +38,17 @@ void MouseInit(void)
 {
 	union REGS regs;
 	int retcode;
-	regs.x.ax=0;
-	int86(51,&regs,&regs);
-	retcode=regs.x.ax;
-	if(retcode==0)
-	{
+    regs.x.ax=0;
+    int86(51,&regs,&regs);
+    retcode=regs.x.ax;
+    if(retcode==0)
+    {
 		ReturnMode();
-		printf("mouse driver is not installed \n");
+		printf("mouse or mouse driver is absent,please install ");
 		getch();
 		exit(1);
-
-	}
+    }
+    return;
 }
 
 /**********************************************************************
@@ -56,16 +56,18 @@ void MouseInit(void)
 	参数说明：int left,int top,int right,int bottom分别为左上右下坐标
 	返回值说明：无
 *********************************************************************/
-void SetMouseRange(int left,int top,int right,int bottom)
+void SetMouseRange(const int left,const int top,const int right,const int bottom)
 {
-	union REGS regs;
+	 union REGS regs;
+	 int retcode,xmin=left,ymin=top,xmax=right-16,ymax=bottom-16;
+	 /*设定鼠标移动的边界*/
     regs.x.ax=7;
-    regs.x.cx=left;
-    regs.x.dx=right-16;
+    regs.x.cx=xmin;
+    regs.x.dx=xmax;
     int86(51,&regs,&regs);
     regs.x.ax=8;
-    regs.x.cx=top;
-    regs.x.dx=bottom-16;
+    regs.x.cx=ymin;
+    regs.x.dx=ymax;
     int86(51,&regs,&regs);
 }
 
@@ -75,13 +77,14 @@ void SetMouseRange(int left,int top,int right,int bottom)
 	返回值说明：无
 *********************************************************************/
 
-void SetMousePositon(int x,int y)
+void SetMousePosition(int x,int y)
 {
 	union REGS regs;
-	regs.x.ax=4;
+    regs.x.ax=4;
 	regs.x.cx=x;
-	regs.x.dx=y;
-	int86(51,&regs,&regs);
+    regs.x.dx=y;
+	int86(51,&regs,&regs);//设置鼠标当前坐标			 
+	return ;
 
 }
 
@@ -98,8 +101,7 @@ void  MouseSetSpeed(int vx,int vy)
 	regs.x.cx=vx;
     regs.x.dx=vy;
 	int86(51,&regs,&regs);
-} 
-
+}
 /******************************************************
 	功能说明：读鼠标的位置和按钮状态函数
 	参数说明：mouse_x，mouse_y为鼠标坐标，mouse_butt为鼠标案件状态，1，2,4分别表示按下左中右键
@@ -147,7 +149,7 @@ void ReadMouse2(int *mouse_x,int *mouse_y,char *mouse_butt)
 	参数说明：结构体说明见SVGA.H，
 	返回值说明：无返回值
 **************************************************************************/
-void MouseCopy(Coord *CoordXY,char *mouse_buffer)    
+void MouseCopy(Coord *CoordXY,short  *mouse_buffer)    
 {
 	int i,j;
 	unsigned long pos;
@@ -160,14 +162,14 @@ void MouseCopy(Coord *CoordXY,char *mouse_buffer)
 	{
 		for(j=0;j<16;j++)
 		{
-			pos=((CoordXY->y+i)*1600L+CoordXY->x+j);
+			pos=(((CoordXY->y)+i)*1600L+(CoordXY->x)+j);
 			new_page=pos>>15;
 			if(old_page!=new_page)
 			{
 				SelectPage(new_page);
 				old_page=new_page;
 			}
-			mouse_buffer[i*16+j]=video_buffer[pos&0x0000ffffL];
+			mouse_buffer[i*16+j]=video_buffer[pos%32768];
 		}
 	}
 
@@ -178,9 +180,9 @@ void MouseCopy(Coord *CoordXY,char *mouse_buffer)
 	参数说明：结构体说明见SVGA.H，
 	返回值说明：无返回值
 *****************************************************************************/
-void MouseReshow(Coord *CoordXY,char *mouse_buffer)
+void MouseReshow(Coord *CoordXY,short *mouse_buffer)
 {
-	 int i,j;
+	int i,j;
     char old_page,new_page;
     unsigned long pos;
     short far *video_buffer=(short far *)0xA0000000L;
@@ -198,7 +200,7 @@ void MouseReshow(Coord *CoordXY,char *mouse_buffer)
 				SelectPage(new_page);
                 old_page=new_page;
             }
-			video_buffer[pos&0x0000ffffl]=mouse_buffer[i*16+j];
+			video_buffer[pos%65536]=mouse_buffer[i*16+j];
         }
     }
 }
