@@ -200,7 +200,6 @@ unsigned char GetSVGAMode()
 	参数说明：index，页面号
 	返回值说明：0
 *******************************************************/
-/
 unsigned int SelectPage(unsigned char index)
 {
 	union REGS in,out;
@@ -319,6 +318,124 @@ char ReadBmp(int x,int y,char *FileName)
     free(buffer);
     return 1;
 }
+
+/*******************************************************
+	功能说明：从硬盘读取BMP直接到显存
+	参数说明：x，y：图片左上角坐标，FileName：文件路径
+	          x0,y0截取图片部分的左上角坐标，H,W截取图片部分的高与宽
+	返回值说明：成功返回1，否则返回0
+***********************************************************/
+char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName)
+{
+    int i,j,k=0;
+    FILE *fp;
+	char old_page=0,new_page=0;
+	unsigned int data_offset;
+	long width,height;
+    long linebytes;
+	
+	/*宽高限制*/
+	int      ResX; 
+    int      ResY;
+    
+	unsigned long pos;
+    short *buffer;
+
+
+	BITMAPFILEHEADER		FileHeader;
+	BITMAPINFOHEADER		 bmiHeader;
+
+	short far *vedio_buffer=(short far *)0xA0000000L;
+    if((fp=fopen(FileName,"rb"))==NULL)
+    {
+		ReturnMode();
+		printf("Cannot read the picture\n\t\t%s",FileName);
+        getch();
+        return 0;
+    }
+
+
+	if (fread((char *)&FileHeader, sizeof(FileHeader), 1, fp) != 1)
+	{
+		printf("Can't read file header !\n"); 								/*  读文件头 */
+		return 0;
+	}
+	if (FileHeader.bfType != 0X4D42)
+	{																		/* BM */
+		fprintf(stderr, "Not a BMP file !\n");
+		return 0;
+	}
+
+	if (fread((char *)&bmiHeader, sizeof(bmiHeader), 1, fp) != 1)
+	{
+		fprintf(stderr, "Can't read bmiHeader !\n");   						/*  读信息头 */
+		return 0;
+	}
+	if (bmiHeader.biBitCount <16)
+	{
+		fprintf(stderr, "Not non-compressed image !\n");
+		return 0;
+	}
+
+
+	width = (unsigned int)bmiHeader.biWidth;
+	height = (unsigned int)bmiHeader.biHeight;
+    data_offset = (unsigned int)FileHeader.bfOffBits;
+
+
+	/*RAM start*/
+	buffer=(short *)malloc(Width*sizeof(short));
+	if(buffer==NULL)
+	{
+		ReturnMode();
+		printf("SVGA.c_Malloc error! in function ReadBMP!");
+		getch();
+		return 1;
+	}
+
+   																			 /*设置宽高限制*/
+    if ((w + x) > 1600)
+        ResX = 1600 - x;
+    else ResX = w;
+	if ((h + y) > 600)
+        ResY = 600 - y;
+    else ResY = h;
+    
+	
+	
+    k=(width*2%4)?(4-width*2%4):0;											/*拼凑4字节倍数修正宽度*/
+	linebytes = width * 2+k;
+
+
+	fseek(fp,data_offset+linebytes*(height-y0-h)+x0*2l,SEEK_SET);
+	old_page=((h-1+y)*1600l+x)>>15;
+	new_page=old_page;
+    SelectPage(old_page);   
+	for(i=h-1;i>=0;i--)
+    {
+		fread(buffer,width*2+k,1,fp);  										//读取一行像素点的信息
+		if(i<ResY)
+		{
+		  for(j=0;j<ResX;j++)     											//		把读取的一行像素点显示出来
+		  {
+			 pos=((i+y)*1600l+j+x);
+			 new_page=pos>>15;
+			 if(new_page!=old_page)											/*Change Pages!!!*/
+			 {
+				 SelectPage(new_page);
+				 old_page=new_page;
+             }
+             vedio_buffer[pos&0x0000ffffl]=buffer[j];
+          }
+		}    
+	}
+    																		
+    fclose(fp);																/*Close file*/
+    free(buffer);
+    return 1;
+}
+
+
 
 /*********************************************************************
 	功能说明：逻辑显存横向像素数量设定
