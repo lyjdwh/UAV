@@ -1,10 +1,10 @@
-#ifndef _mouse_h_
-#define _mouse_h_
+#ifndef _MOUSE_H_
+#define _MOUSE_H_
 typedef struct 
 {
 	int x;
 	int y;
-} Coord;	//é¼ æ ‡åæ ‡
+} Coord;	//Êó±ê×ø±ê
 
 void MouseInit(void);
 void SetMouseRange(int left,int top,int right,int bottom);

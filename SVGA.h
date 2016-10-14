@@ -1,5 +1,5 @@
 /*******************************
-å›¾ç‰‡æ˜¾ç¤ºçš„å‡½æ•°çš„å¤´æ–‡ä»¶
+Í¼Æ¬ÏÔÊ¾µÄº¯ÊıµÄÍ·ÎÄ¼ş
 *******************************/
 
 #ifndef _SVGA_H_
@@ -11,38 +11,39 @@ void YLine(int x,int y,int length, int color);
 unsigned char SetSVGAMode(unsigned int mode);
 unsigned char GetSVGAMode();
 unsigned int SelectPage(unsigned char index);
-void ReturnMode() ; 
+void ReturnMode()  ; 
 char ReadBmp(int x,int y,char *FileName);
+char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName);
 void SetScreenWidth(unsigned pixels);
 void SetShowBegin(int x,int y) ;
 
 
-/*æ–‡ä»¶å¤´ç»“æ„*/
+/*ÎÄ¼şÍ·½á¹¹*/
 typedef struct{
-	int	bfType;				/*  é€šå¸¸æ˜¯ 'BM' ã€‚ç°åœ¨æ¥çœ‹ä¼¼ä¹åˆ¤æ–­ OS/2 çš„æ ‡è¯†å·²æ— ä»€ä¹ˆæ„ä¹‰*/
-	long	 bfSize;		/*  æ–‡ä»¶å¤§å°ï¼Œä»¥å­—èŠ‚ä¸ºå•ä½*/
-	int	bfReserved1;		/*ä¿ç•™ï¼Œå¿…é¡»è®¾ç½®ä¸º 0*/
-	int	bfReserved2;		/*ä¿ç•™ï¼Œå¿…é¡»è®¾ç½®ä¸º 0*/
-	long	bfOffBits;		/*ä»æ–‡ä»¶å¤´å¼€å§‹åˆ°å®é™…çš„å›¾è±¡æ•°æ®ä¹‹é—´çš„å­—èŠ‚çš„åç§»é‡ã€‚è¿™*/
-							/*ä¸ªå‚æ•°æ˜¯éå¸¸æœ‰ç”¨çš„ï¼Œå› ä¸ºä½å›¾ä¿¡æ¯å¤´å’Œè°ƒè‰²æ¿çš„é•¿åº¦ä¼š*/
-							/*æ ¹æ®ä¸åŒæƒ…å†µè€Œå˜åŒ–ï¼Œå¯ä»¥ç”¨è¿™ä¸ªåç§»å€¼è¿…é€Ÿçš„ä»æ–‡ä»¶ä¸­*/
-							/*è¯»å–åˆ°ä½æ•°æ®ã€‚ */
+	int	bfType;				/*  Í¨³£ÊÇ 'BM' ¡£ÏÖÔÚÀ´¿´ËÆºõÅĞ¶Ï OS/2 µÄ±êÊ¶ÒÑÎŞÊ²Ã´ÒâÒå*/
+	long	 bfSize;		/*  ÎÄ¼ş´óĞ¡£¬ÒÔ×Ö½ÚÎªµ¥Î»*/
+	int	bfReserved1;		/*±£Áô£¬±ØĞëÉèÖÃÎª 0*/
+	int	bfReserved2;		/*±£Áô£¬±ØĞëÉèÖÃÎª 0*/
+	long	bfOffBits;		/*´ÓÎÄ¼şÍ·¿ªÊ¼µ½Êµ¼ÊµÄÍ¼ÏóÊı¾İÖ®¼äµÄ×Ö½ÚµÄÆ«ÒÆÁ¿¡£Õâ*/
+							/*¸ö²ÎÊıÊÇ·Ç³£ÓĞÓÃµÄ£¬ÒòÎªÎ»Í¼ĞÅÏ¢Í·ºÍµ÷É«°åµÄ³¤¶È»á*/
+							/*¸ù¾İ²»Í¬Çé¿ö¶ø±ä»¯£¬¿ÉÒÔÓÃÕâ¸öÆ«ÒÆÖµÑ¸ËÙµÄ´ÓÎÄ¼şÖĞ*/
+							/*¶ÁÈ¡µ½Î»Êı¾İ¡£ */
 } BITMAPFILEHEADER;
 
-/*ä¿¡æ¯å¤´ç»“æ„*/
+/*ĞÅÏ¢Í·½á¹¹*/
 typedef struct tagBITMAPINFOHEADER
 {
-	long	biSize;			/* ä¿¡æ¯å¤´å¤§å° */
-	long	biWidth;		/* å›¾åƒå®½åº¦ */
-	long	biHeight;		/* å›¾åƒé«˜åº¦ */
-	int	biPlanes;			/*  å¿…é¡»ä¸º 1 */
-	int	biBitCount;			/*  æ¯åƒç´ ä½æ•°ï¼Œå¿…é¡»æ˜¯ 1, 4, 8 æˆ– 24 */
-	long	biCompression;	/*  å‹ç¼©æ–¹æ³• */
-	long	biSizeImage;	/* å®é™…å›¾åƒå¤§å°ï¼Œå¿…é¡»æ˜¯ 4 çš„å€æ•° */
-	long	biXPelsPerMeter;/*  æ°´å¹³æ–¹å‘æ¯ç±³åƒç´ æ•° */
-	long	biYPelsPerMeter;/*  å‚ç›´æ–¹å‘æ¯ç±³åƒç´ æ•°*/
-	long	biClrUsed;		/*  æ‰€ç”¨é¢œè‰²æ•°*/
-	long	biClrImportant;	/* é‡è¦çš„é¢œè‰²æ•° */
+	long	biSize;			/* ĞÅÏ¢Í·´óĞ¡ */
+	long	biWidth;		/* Í¼Ïñ¿í¶È */
+	long	biHeight;		/* Í¼Ïñ¸ß¶È */
+	int	biPlanes;			/*  ±ØĞëÎª 1 */
+	int	biBitCount;			/*  Ã¿ÏñËØÎ»Êı£¬±ØĞëÊÇ 1, 4, 8 »ò 24 */
+	long	biCompression;	/*  Ñ¹Ëõ·½·¨ */
+	long	biSizeImage;	/* Êµ¼ÊÍ¼Ïñ´óĞ¡£¬±ØĞëÊÇ 4 µÄ±¶Êı */
+	long	biXPelsPerMeter;/*  Ë®Æ½·½ÏòÃ¿Ã×ÏñËØÊı */
+	long	biYPelsPerMeter;/*  ´¹Ö±·½ÏòÃ¿Ã×ÏñËØÊı*/
+	long	biClrUsed;		/*  ËùÓÃÑÕÉ«Êı*/
+	long	biClrImportant;	/* ÖØÒªµÄÑÕÉ«Êı */
 } BITMAPINFOHEADER;
 
 

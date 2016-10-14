@@ -1,0 +1,4 @@
+F:\opencv\build\include
+F:\opencv\build\x64\vc12\lib
+opencv_ts300d.lib
+opencv_world300d.lib

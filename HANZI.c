@@ -1,24 +1,68 @@
 #include <stdio.h>
 #include <process.h>
+
 #include "HANZI.h"
 #include "SVGA.h"
 
+void PrintASC(char *s,int x,int y,int dx,int dy,short color)//dxÎª×Ö¾à£¬dyÎª×ÖÌå´ÖÏ¸
+{
+	char *s1;
+	unsigned long offset;
+	FILE *fp;
+	char buffer[16]; //bufferÓÃÀ´´æ´¢Ò»¸ö×Ö·û
+	int m,n,i,j;
+	if ((fp=fopen("asc16","rb"))==NULL)
+	{
+		printf("Can't open asc16,Please add it");
+		exit(1);
+	}
+	s1=s;
+	while(*s)
+	{
+		offset=(*s)*16+1; //¼ÆËã¸Ã×Ö·ûÔÚ×Ö¿âÖĞÆ«ÒÆÁ¿
+		fseek(fp,offset,SEEK_SET);
+		fread(buffer,16,1,fp); //È¡³ö×Ö·û16×Ö½ÚµÄµãÕó×ÖÄ£´æÈëbufferÖĞ
+
+		for(n=0;n<dx;n++) //½«16Î»×Ö½ÚµÄµãÕó°´Î»ÔÚÆÁÄ»ÉÏ´òÓ¡³öÀ´(1:´òÓ¡,0:²»´òÓ¡),ÏÔÊ¾×Ö·û
+		{
+			for(i=0;i<16;i++)
+			{
+						for(j=0;j<8;j++)
+						{
+							for(m=0;m<dy;m++)
+							{
+								if(((buffer[i]>>(7-j))&0x1)!=NULL)
+								{
+									PutPixel(x+j+n,y+i+m,color);
+								}
+							}
+						}
+
+			}
+		}
+		s++; //Ò»¸ö×Ö·ûÄÚÂëÕ¼ÓÃÒ»¸ö×Ö½Ú
+		x+=8*dx;//×Ö·û¼ä¼ä¸ô
+	}
+	s=s1;
+	fclose(fp);
+
+}
 /********************************
-	åŠŸèƒ½è¯´æ˜ï¼š12*12ç‚¹é˜µæ±‰å­—çš„æ˜¾ç¤º
-	å‚æ•°è¯´æ˜ï¼š
-		int x        èµ·å§‹xåæ¨™
-		int y        èµ·å§‹yåæ¨™
-		int color    æŒ‡å®šçš„é¢œè‰²
-		int gap		 é–“éš”
-		modeä¸º0åˆ™æ¨ªå‘è¾“å‡ºï¼Œ1åˆ™çºµå‘è¾“å‡º
-	è¿”å›å€¼è¯´æ˜:æ—  
+	¹¦ÄÜËµÃ÷£º12*12µãÕóºº×ÖµÄÏÔÊ¾
+	²ÎÊıËµÃ÷£º
+		int x        ÆğÊ¼x×ø˜Ë
+		int y        ÆğÊ¼y×ø˜Ë
+		int color    Ö¸¶¨µÄÑÕÉ«
+		int gap		 ég¸ô
+		modeÎª0ÔòºáÏòÊä³ö£¬1Ôò×İÏòÊä³ö
+	·µ»ØÖµËµÃ÷:ÎŞ 
 ********************************/
 void PrintHZ12(int x,int y,char *s,int color,int dx,int dy,int gap,int mode)  
 {
 	char *s1;
 	unsigned long offset;
 	FILE *fp;
-	char buffer[24]; 											//bufferç”¨æ¥å­˜å‚¨ä¸€ä¸ªæ±‰å­—
+	char buffer[24]; 											//bufferÓÃÀ´´æ´¢Ò»¸öºº×Ö
 	int m,n,i,j,k;
 	unsigned char qh,wh;
 
@@ -30,13 +74,13 @@ void PrintHZ12(int x,int y,char *s,int color,int dx,int dy,int gap,int mode)
 	s1=s;
 	while(*s)
 	{
-		qh=*(s)-0xa0; 											//æ±‰å­—åŒºä½ç 
+		qh=*(s)-0xa0; 											//ºº×ÖÇøÎ»Âë
 		wh=*(s+1)-0xa0;
-		offset=(94*(qh-1)+(wh-1))*24L; 							//è®¡ç®—è¯¥æ±‰å­—åœ¨å­—åº“ä¸­åç§»é‡
+		offset=(94*(qh-1)+(wh-1))*24L; 							//¼ÆËã¸Ãºº×ÖÔÚ×Ö¿âÖĞÆ«ÒÆÁ¿
 		fseek(fp,offset,SEEK_SET);
-		fread(buffer,24,1,fp); 									//å–å‡ºæ±‰å­—32å­—èŠ‚çš„ç‚¹é˜µå­—æ¨¡å­˜å…¥bufferä¸­ï¼ˆä¸€ä¸ªæ±‰å­—ï¼‰
+		fread(buffer,24,1,fp); 									//È¡³öºº×Ö32×Ö½ÚµÄµãÕó×ÖÄ£´æÈëbufferÖĞ£¨Ò»¸öºº×Ö£©
 
-		for(i=0;i<12;i++) 										//å°†24ä½å­—èŠ‚çš„ç‚¹é˜µæŒ‰ä½åœ¨å±å¹•ä¸Šæ‰“å°å‡ºæ¥(1:æ‰“å°,0:ä¸æ‰“å°),æ˜¾ç¤ºæ±‰å­—
+		for(i=0;i<12;i++) 										//½«24Î»×Ö½ÚµÄµãÕó°´Î»ÔÚÆÁÄ»ÉÏ´òÓ¡³öÀ´(1:´òÓ¡,0:²»´òÓ¡),ÏÔÊ¾ºº×Ö
 		{
 			for(n=0;n<dx;n++)
 			{
@@ -55,10 +99,10 @@ void PrintHZ12(int x,int y,char *s,int color,int dx,int dy,int gap,int mode)
 					}
 			}
 		}
-		s+=2; 													//ä¸€ä¸ªæ±‰å­—å†…ç å ç”¨ä¸¤ä¸ªå­—èŠ‚
+		s+=2; 													//Ò»¸öºº×ÖÄÚÂëÕ¼ÓÃÁ½¸ö×Ö½Ú
 		if(mode==0)
 		{
-			x+=gap;												//å­—é—´é—´éš”
+			x+=gap;												//×Ö¼ä¼ä¸ô
 		}
 		if(mode==1)
 		{
@@ -70,14 +114,14 @@ void PrintHZ12(int x,int y,char *s,int color,int dx,int dy,int gap,int mode)
 	fclose(fp);
 }
 /********************************
-	åŠŸèƒ½è¯´æ˜ï¼š16*16ç‚¹é˜µæ±‰å­—çš„æ˜¾ç¤º
-	å‚æ•°è¯´æ˜ï¼š
-		int x        èµ·å§‹xåæ¨™
-		int y        èµ·å§‹yåæ¨™
-		int color    æŒ‡å®šçš„é¢œè‰²
+	¹¦ÄÜËµÃ÷£º16*16µãÕóºº×ÖµÄÏÔÊ¾
+	²ÎÊıËµÃ÷£º
+		int x        ÆğÊ¼x×ø˜Ë
+		int y        ÆğÊ¼y×ø˜Ë
+		int color    Ö¸¶¨µÄÑÕÉ«
 		int dx,dy
 		
-	è¿”å›å€¼è¯´æ˜:æ—  
+	·µ»ØÖµËµÃ÷:ÎŞ 
 ********************************/
 
 void PrintHZ16(int x,int y,char *s,int color,int dx,int dy)  
@@ -85,7 +129,7 @@ void PrintHZ16(int x,int y,char *s,int color,int dx,int dy)
 	char *s1;
 	unsigned long offset;
  	FILE *fp;
- 	char buffer[32]; 											//bufferç”¨æ¥å­˜å‚¨ä¸€ä¸ªæ±‰å­—
+ 	char buffer[32]; 											//bufferÓÃÀ´´æ´¢Ò»¸öºº×Ö
  	int m,n,i,j,k;
  	unsigned char qh,wh;
 
@@ -97,13 +141,13 @@ void PrintHZ16(int x,int y,char *s,int color,int dx,int dy)
 	s1=s;
 	while(*s)
 	{
-		qh=*(s)-0xa0; 											//æ±‰å­—åŒºä½ç 
+		qh=*(s)-0xa0; 											//ºº×ÖÇøÎ»Âë
 		wh=*(s+1)-0xa0;
-		offset=(94*(qh-1)+(wh-1))*32L; 							//è®¡ç®—è¯¥æ±‰å­—åœ¨å­—åº“ä¸­åç§»é‡
+		offset=(94*(qh-1)+(wh-1))*32L; 							//¼ÆËã¸Ãºº×ÖÔÚ×Ö¿âÖĞÆ«ÒÆÁ¿
 		fseek(fp,offset,SEEK_SET);
-		fread(buffer,32,1,fp); 									//å–å‡ºæ±‰å­—32å­—èŠ‚çš„ç‚¹é˜µå­—æ¨¡å­˜å…¥bufferä¸­ï¼ˆä¸€ä¸ªæ±‰å­—ï¼‰
+		fread(buffer,32,1,fp); 									//È¡³öºº×Ö32×Ö½ÚµÄµãÕó×ÖÄ£´æÈëbufferÖĞ£¨Ò»¸öºº×Ö£©
 		
-		for(i=0;i<16;i++) 										//å°†32ä½å­—èŠ‚çš„ç‚¹é˜µæŒ‰ä½åœ¨å±å¹•ä¸Šæ‰“å°å‡ºæ¥(1:æ‰“å°,0:ä¸æ‰“å°),æ˜¾ç¤ºæ±‰å­—
+		for(i=0;i<16;i++) 										//½«32Î»×Ö½ÚµÄµãÕó°´Î»ÔÚÆÁÄ»ÉÏ´òÓ¡³öÀ´(1:´òÓ¡,0:²»´òÓ¡),ÏÔÊ¾ºº×Ö
 		{
 			for(n=0;n<dx;n++)
 			{
@@ -122,8 +166,8 @@ void PrintHZ16(int x,int y,char *s,int color,int dx,int dy)
 					}
 			}
 		}
-		s+=2; 													//ä¸€ä¸ªæ±‰å­—å†…ç å ç”¨ä¸¤ä¸ªå­—èŠ‚
-		x+=16;													//å­—é—´é—´éš”
+		s+=2; 													//Ò»¸öºº×ÖÄÚÂëÕ¼ÓÃÁ½¸ö×Ö½Ú
+		x+=16;													//×Ö¼ä¼ä¸ô
 
 	}
 	s=s1;

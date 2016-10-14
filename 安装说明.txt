@@ -1,0 +1,5 @@
+1.首先安装所需扩展，pip3 install requirements
+2.进行数据库迁移：python manage.py db init
+				python manage.py db migrate
+				python manage.py db upgrade
+3.关于新闻和首页，前台代码还没有给我，所以应该不能运行

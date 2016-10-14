@@ -1,9 +1,10 @@
-/***************************
-所有用到的头文件都包含在这里
-*******************************/
 #ifndef _HEAD_H_
 #define _HEAD_H_
 
+typedef struct UAVPara
+{
+	short *mouse_buffer;
+} UAVPara;
 
-
+	
 #endif

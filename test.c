@@ -11,22 +11,25 @@
 #include "HANZI.h"
 #include "mouse.h"
 
+
 void main()
 {	short mouse_buffer[16*16];
 	Coord mouse;
 	char a;
-	SetSVGAMode(0x115);
+	SetSVGAMode(0x113);
 	SetScreenWidth(1600L);
 	// SetShowBegin(1200,0);
 	//SetScreenWidth() ;
-	//PrintHZ16(400,0,"ç‚¹å‡»æŒ‰é”®é€‰æ‹©åœ°å›¾ï¼Œç‚¹å‡»åœ°å›¾è¿›å…¥é¢„è§ˆæ¨¡å¼",0x8972,1,1);     
+	// PrintHZ16(400,0,"µã»÷°´¼üÑ¡ÔñµØÍ¼£¬µã»÷µØÍ¼½øÈëÔ¤ÀÀÄ£Ê½",0x8972,1,1);     
 	//delay(5000)      ;
-	ReadBmp(0,0,"login.bmp");
+	// ReadBmp(0,0,"login.bmp");
+	ReadBmp(0,0,"enter.bmp");
 	ReadBmp(800,0,"jm3.bmp");
-	//SetShowBegin(400,0);
-	//PrintHZ16(320-64,355,"è¾“å…¥çš„è´¦å·å¯†ç ä¸æ­£ç¡®ï¼æŒ‰ä»»æ„é”®ç»§ç»­",0x0000,1,1);
+	//SetShowBegin(400,0);PrintASC(str,x1,y1,1,1,0xffff);
+	PrintASC("ljjdwh",200,200,1,1,0xffff);
+	PrintHZ16(320-64,355,"ÊäÈëµÄÕËºÅÃÜÂë²»ÕıÈ·£¡°´ÈÎÒâ¼ü¼ÌĞø",0x0000,1,1);
 	//delay(5000);
-	//PrintHZ16(400,0,"ç‚¹å‡»æŒ‰é”®é€‰æ‹©åœ°å›¾ï¼Œç‚¹å‡»åœ°å›¾è¿›å…¥é¢„è§ˆæ¨¡å¼",0x8972,1,1); 
+	PrintHZ16(400,0,"µã»÷°´¼üÑ¡ÔñµØÍ¼£¬µã»÷µØÍ¼½øÈëÔ¤ÀÀÄ£Ê½",0x8972,1,1); 
 	
 	MouseInit();
 	SetMouseRange(0,0,800,600);
