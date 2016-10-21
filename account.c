@@ -84,6 +84,8 @@ void SearchAccount(Account * p)
 		for(i=0;i<n+1;i++)
 		{
 			fscanf(fp,FORMAT,temp.user_name,temp.password,temp.email);
+			if (strcmp(temp.user_name,p->user_name)==0)
+				strcpy(p->email,temp.email);
 			if(strcmp(temp.user_name,p->user_name)==0&&strcmp(temp.password,p->password)==0)
 			{
 				rewind(tfp);

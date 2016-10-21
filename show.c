@@ -43,7 +43,8 @@ void UAVInit(UAVPara *para)
 void LoginInit()
 {
 	ReadBmp(0,0,"back\\login.bmp");
-	SetMouseRange(0,0,600,800);
+	ReadBmp(220,208,"back\\name.bmp");
+	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 	
 }
@@ -92,7 +93,7 @@ void LoginCheck(UAVPara *para,Account *account,int *flag)
 void RegisterInit()
 {
 	ReadBmp(0,0,"back\\register.bmp");
-	SetMouseRange(0,0,600,800);
+	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
 void RegisterCheck(UAVPara *para,Account *account,int *flag)
@@ -142,16 +143,17 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
-void ForgetInit()
+void Forget1Init()
 {
 	ReadBmp(0,0,"back\\forget1.bmp");
-	SetMouseRange(0,0,600,800);
+	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
-void ForgetCheck(UAVPara *para,Account *account,int *flag)
+void Forget1Check(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
 	char mouse_butt;
+	Account temp;
 	while(1)
 	{
 		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
@@ -159,7 +161,7 @@ void ForgetCheck(UAVPara *para,Account *account,int *flag)
 		MouseShow(&mouse);
 		MouseReshow(&mouse,para->mouse_buffer);
 		TextBox(224,205,445,240,account->user_name,1,"forget");
-		TextBox(224,260,445,295,account->password,0,"forget");
+		TextBox(224,260,445,295,temp.email,1,"forget");
 		
 		if(Button(295,485,440,525)==1)
 		{
@@ -167,9 +169,22 @@ void ForgetCheck(UAVPara *para,Account *account,int *flag)
 			return ;
 		}
 		if(Button(105,350,440,390)==1)
-		{
-			*flag=6;
-			return;
+		{	SearchAccount(account);
+			if(account->message==2)
+			{
+				ProcessMessage(account->message,225,305);
+				ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
+	
+			}else if(strcmp(account->email,temp.email)!=0)
+			{
+				PrintHZ16(225,305,"邮箱验证错误",0xffff,1,1);
+				getch();
+				ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
+			}else{
+				*flag=6;
+				return;
+			}
+			
 		}
 		if(Button(105,420,440,455)==1)
 		{
@@ -184,4 +199,51 @@ void ForgetCheck(UAVPara *para,Account *account,int *flag)
 		
 	}
 
+}
+void Forget2Init()
+{
+	ReadBmp(0,0,"back\\forget2.bmp");
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+void Forget2Check(UAVPara *para,Account *account,int *flag)
+{
+	Coord mouse;
+	char mouse_butt;
+	Account temp;
+	while(1)
+	{
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,para->mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,para->mouse_buffer);
+		TextBox(225,205,450,240,account->password,0,"forget1");
+		TextBox(225,260,450,300,temp.password,0,"forget1");
+		if(Button(105,348,440,385)==1)
+		{
+			
+			if(strcmp(account->password,temp.password)!=0)
+			{
+				PrintHZ16(225,305,"两次密码不一致",0xffff,1,1);
+				getch();
+				ReadPartBMP(225,305,225,305,400,60,"back\\forget2.bmp");
+			}else{
+				ChangePassword(*account);
+				*flag=4;
+				return;
+			}
+		}
+		if(Button(105,415,440,455)==1)
+		{
+			*flag=1;
+		}
+		if(Button(105,485,240,525)==1)
+		{
+			*flag=5;
+		}
+		if(Button(290,490,440,525)==1)
+		{
+			*flag=2;
+		}
+	}
 }

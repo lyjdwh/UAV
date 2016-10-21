@@ -39,6 +39,10 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 			{
 				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\forget1.bmp");
 			}
+			if(strcmp(page,"forget1")==0)
+			{
+				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\forget2.bmp");
+			}
 		while((ka=getch())!=13)
 		{
 			if(strcmp(page,"login")==0)
@@ -63,9 +67,9 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 				str1[i]='\0';
 				if(flag==1)		
 				{	
-					PrintASC(str,x1+5,y1+10,2,1,0x0000);
+					PrintASC(str,x1+5,y1+10,1,1,0x0000);
 				}else if(flag==0){	//密码
-					PrintASC(str1,x1+5,y1+10,2,1,0x0000);//0x0000为黑色
+					PrintASC(str1,x1+5,y1+10,1,1,0x0000);//0x0000为黑色
 				}
  	 	
 			}
@@ -77,9 +81,9 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 				str1[i]='\0'; 	 	
 				if(flag==1)
 				{	
-					PrintASC(str,x1+5,y1+10,2,1,0x0000);
+					PrintASC(str,x1+5,y1+10,1,1,0x0000);
 				}else if(flag==0){
-					PrintASC(str1,x1+5,y1+10,2,1,0x0000);
+					PrintASC(str1,x1+5,y1+10,1,1,0x0000);
 				}
 			}
 

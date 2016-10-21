@@ -39,8 +39,8 @@ void main()
 		}
 		if(flag==3)												//忘记密码
 		{
-			ForgetInit();
-			ForgetCheck(&para,&account,&flag);
+			Forget1Init();
+			Forget1Check(&para,&account,&flag);
 		}
 		if(flag==4)												//进入界面
 		{
@@ -53,7 +53,8 @@ void main()
 		}
 		if(flag==6)												//忘记密码的下一页
 		{
-			exit(1);
+			Forget2Init();
+			Forget2Check(&para,&account,&flag);
 		}
 
 	}
