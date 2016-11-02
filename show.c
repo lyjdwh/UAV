@@ -43,7 +43,6 @@ void UAVInit(UAVPara *para)
 void LoginInit()
 {
 	ReadBmp(0,0,"back\\login.bmp");
-	ReadBmp(220,208,"back\\name.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 	
@@ -70,7 +69,8 @@ void LoginCheck(UAVPara *para,Account *account,int *flag)
 				*flag=4;
 				return;
 			}
-			ReadPartBMP(225,310,225,310,150,30,"back\\login.bmp");
+			//ReadPartBMP(225,310,225,310,150,30,"back\\login.bmp");
+			ReadPartBMP(220,208,220,208,360,184,"back\\login.bmp");
 		}
 		if(Button(105,418,440,455)==1)//忘记密码
 		{
@@ -79,7 +79,8 @@ void LoginCheck(UAVPara *para,Account *account,int *flag)
 		}
 		if(Button(105,485,240,525)==1)//帮助
 		{
-			*flag=5;
+			HelpInit("login");
+			HelpCheck("login",flag);
 			return;
 		}
 		if(Button(295,485,440,525)==1)//注册
@@ -117,12 +118,16 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 			if(account->message==4)
 			{
 				ProcessMessage(account->message,235,385);
-				ReadPartBMP(235,385,235,385,400,60,"back\\register.bmp");
+				//ReadPartBMP(235,385,235,385,400,60,"back\\register.bmp");
+				ReadPartBMP(220,208,220,208,360,184,"back\\register.bmp");
 			}else if(strcmp(account->password,temp.password)!=0)
 			{
-				PrintHZ16(235,385,"两次密码不一致",0xffff,1,1);
-				getch();
-				ReadPartBMP(235,385,235,385,400,60,"back\\register.bmp");
+				//PrintHZ16(235,385,"两次密码不一致",0xffff,1,1);
+				//getch();
+				//ReadPartBMP(235,385,235,385,400,60,"back\\register.bmp");
+				ErrorInfo(4);
+				ErrorCheck();
+				ReadPartBMP(220,208,220,208,360,184,"back\\register.bmp");
 			}else{
 				AddAccount(*account);
 				*flag=4;
@@ -133,7 +138,8 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 		}
 		if(Button(90,500,230,535)==1)
 		{
-			*flag=5;
+			HelpInit("register");
+			HelpCheck("register",flag) ;
 			return;
 		}
 		if(Button(280,500,425,535)==1)
@@ -173,13 +179,17 @@ void Forget1Check(UAVPara *para,Account *account,int *flag)
 			if(account->message==2)
 			{
 				ProcessMessage(account->message,225,305);
-				ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
-	
+				
+				//ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
+				ReadPartBMP(220,208,220,208,360,184,"back\\forget1.bmp");
 			}else if(strcmp(account->email,temp.email)!=0)
 			{
-				PrintHZ16(225,305,"邮箱验证错误",0xffff,1,1);
-				getch();
-				ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
+				//PrintHZ16(225,305,"邮箱验证错误",0xffff,1,1);
+				//getch();
+				//ReadPartBMP(225,305,225,305,400,60,"back\\forget1.bmp");
+				ErrorInfo(5);
+				ErrorCheck();
+				ReadPartBMP(220,208,220,208,360,184,"back\\forget1.bmp");
 			}else{
 				*flag=6;
 				return;
@@ -193,7 +203,8 @@ void Forget1Check(UAVPara *para,Account *account,int *flag)
 		}
 		if(Button(105,485,240,525)==1)
 		{
-			*flag=5;
+			HelpInit("forget1");
+			HelpCheck("forget1",flag);
 			return;
 		}
 		
@@ -224,9 +235,12 @@ void Forget2Check(UAVPara *para,Account *account,int *flag)
 			
 			if(strcmp(account->password,temp.password)!=0)
 			{
-				PrintHZ16(225,305,"两次密码不一致",0xffff,1,1);
-				getch();
-				ReadPartBMP(225,305,225,305,400,60,"back\\forget2.bmp");
+				//PrintHZ16(225,305,"两次密码不一致",0xffff,1,1);
+				//getch();
+				//ReadPartBMP(225,305,225,305,400,60,"back\\forget2.bmp");
+				ErrorInfo(4);
+				ErrorCheck();
+				ReadPartBMP(220,208,220,208,360,184,"back\\forget2.bmp");
 			}else{
 				ChangePassword(*account);
 				*flag=4;
@@ -236,14 +250,172 @@ void Forget2Check(UAVPara *para,Account *account,int *flag)
 		if(Button(105,415,440,455)==1)
 		{
 			*flag=1;
+			return;
 		}
 		if(Button(105,485,240,525)==1)
 		{
-			*flag=5;
+			HelpInit("forget2");
+			HelpCheck("forget2",flag);
+			return;
 		}
 		if(Button(290,490,440,525)==1)
 		{
 			*flag=2;
+			return;
 		}
 	}
+}
+void HelpInit(char *page)
+{	
+	if(strcmp(page,"login")==0)
+	{
+		ReadBmp(0,0,"back\\helpLog.bmp");
+	} else if(strcmp(page,"register")==0){
+		ReadBmp(0,0,"back\\helpR.bmp");
+	}else if(strcmp(page,"forget1")==0)
+	{
+		ReadBmp(0,0,"back\\helpCP1.bmp");	
+	}else if(strcmp(page,"forget2")==0)
+	{
+		ReadBmp(0,0,"back\\helpCP2.bmp");
+	}else if(strcmp(page,"main")==0)	//主页面的帮助界面
+	{
+		ReadBmp(0,0,"back\\app.bmp");
+	}
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+void HelpCheck(char *page,int *flag)
+{	
+	Coord mouse;
+	char mouse_butt;
+	short mouse_buffer[16*16];
+	while(1)
+	{	
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,mouse_buffer);
+		
+			if(Button(40,50,110,115)==1)
+		{
+				if(strcmp(page,"login")==0)
+			{
+				*flag=1;
+				break;
+			} else if(strcmp(page,"register")==0){
+				*flag=2;
+				break;
+			}else if(strcmp(page,"forget1")==0)
+			{			
+				break;
+			}else if(strcmp(page,"forget2")==0)
+			{
+				*flag=6;
+				break;
+			}
+		}
+	}
+}
+/*
+1:用户已存在，2：用户不存在，3：密码错误，4：密码不一致,5:邮箱验证错误
+*/
+void ErrorInfo(int error)
+{	if(error==1)
+		ReadBmp(220,208,"back\\userE.bmp");
+	else if(error==2)
+		ReadBmp(220,208,"back\\noUser.bmp");
+	else if(error==3)
+		ReadBmp(220,208,"back\\passE.bmp");
+	else if(error==4)
+		ReadBmp(220,208,"back\\diffP.bmp");
+	else if(error==5)
+		ReadBmp(220,208,"back\\emailCE.bmp");
+}
+void ErrorCheck()
+{	
+	Coord mouse;
+	char mouse_butt;
+	short mouse_buffer[16*16];
+	while(1)
+	{	
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,mouse_buffer);
+		if (Button(540,210,580,253)==1)//320,2,360,45
+		{
+			break;
+		}
+	}
+}
+void MainInit()
+{
+	ReadBmp(0,0,"back\\app.bmp");
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+
+void MainCheck(UAVPara *para,Account *account,int *flag)
+{
+	Coord mouse;
+	char mouse_butt;
+	Account temp;
+	while(1)
+	{
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,para->mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,para->mouse_buffer);
+		if(Button(60,180,200,310)==1)
+		{
+			*flag=7;		//打开地图页面标志位
+			break;
+		}
+		if(Button(220,180,365,310)==1)
+		{
+			*flag=8;		//生成地图页面标志位
+			break;
+		}
+		if(Button(60,330,200,480)==1)
+		{
+			*flag=9;		//运行日志
+			break;
+		}
+		if(Button(220,325,370,400)==1)
+		{
+							//帮助  ##############################
+		}
+		if(Button(220,410,365,480)==1)
+		{
+			exit(1);		//退出
+		}
+		if(Button(385,180,460,480)==1)
+		{
+			*flag=1;		//从新登录
+			break;
+		}
+	}
+	
+}
+
+void OpenMapInit()
+{
+	ReadBmp(0,0,"back\\openMap.bmp");
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+
+void OpenMapCheck(UAVPara *para,Account *account,int *flag)
+{
+	Coord mouse;
+	char mouse_butt;
+	Account temp;
+	while(1)
+	{
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,para->mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,para->mouse_buffer);
+}
 }

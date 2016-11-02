@@ -25,6 +25,8 @@ void main()
 	// ReadBmp(0,0,"login.bmp");
 	ReadBmp(0,0,"enter.bmp");
 	ReadBmp(800,0,"jm3.bmp");
+	ReadBmp(220,208,"back\\emailCE.bmp");
+
 	//SetShowBegin(400,0);PrintASC(str,x1,y1,1,1,0xffff);
 	PrintASC("ljjdwh",200,200,1,1,0xffff);
 	PrintHZ16(320-64,355,"输入的账号密码不正确！按任意键继续",0x0000,1,1);

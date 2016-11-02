@@ -6,6 +6,7 @@
 #include <dos.h>
 #include <time.h>
 #include <conio.h>
+#include <dir.h>
 
 #include "head.h"
 #include "SVGA.h"
@@ -14,6 +15,7 @@
 #include "button.h"
 #include "account.h"
 #include "input.h"
+#include "show.h"
 
 /**********************************************************************
 	功能说明：添加新的账户
@@ -22,8 +24,10 @@
 *********************************************************************/
 void AddAccount(Account p)
 {
-	FILE *fp, *tfp;
+	FILE *fp, *tfp,*fmap;
 	int count;
+	char path[MAXLEN*2];
+	char dir[MAXLEN*2];
 	fp = fopen(USERFILE, "r+");
 	if (fp == NULL)
 	{	
@@ -50,6 +54,14 @@ void AddAccount(Account p)
 	rewind(tfp);
 	fprintf(tfp, FORMAT, p.user_name, p.password, p.email);
 	fclose(tfp);
+	strcat(path,"account\\");
+	strcat(path,p.user_name);
+	strcat(path,"\\map.list");
+	strcat(dir,"account\\");
+	strcat(dir,p.user_name);
+	mkdir(dir);
+	fmap=fopen(path,"w");
+	fclose(fmap);
 }
 
 /**********************************************************************
@@ -151,25 +163,28 @@ int ProcessMessage(int message,int x,int y)
 	switch (message)
 	{
 		case 1:
-		{	
+		{
 			return 1;
 		}
 		case 2:
 		{
-			PrintHZ16(x,y,"找不到用户",0xffff,1,1); 
-			getch();
+			//PrintHZ16(x,y,"找不到用户",0xffff,1,1);
+			ErrorInfo(2);
+			ErrorCheck();
 			return 0;
 		}
 		case 3:
 		{
-			PrintHZ16(x,y,"密码不正确",0xffff,1,1); 
-			getch();
+			//PrintHZ16(x,y,"密码不正确",0xffff,1,1);
+			ErrorInfo(3);
+			ErrorCheck();
 			return 0;
 		}
 		case 4:
 		{
-			PrintHZ16(x,y,"已经有同名用户",0xffff,1,1); 
-			getch();
+			//PrintHZ16(x,y,"已经有同名用户",0xffff,1,1);
+			ErrorInfo(1);
+			ErrorCheck();
 			return 0;
 		}
 	}
