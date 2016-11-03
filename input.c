@@ -15,7 +15,14 @@
 #include "button.h"
 #include "input.h"
 
-
+/**********************************************************************
+	功能说明: 文本框输入
+	参数说明：int x1, int y1, int x2, int y2 为文本框的左上，右下的坐标，
+			  *str 保存输入的字符串
+			  int flag 为0时为普通文本框，为0时为密码输入框
+			  char *flag 为文本框所在页面
+	返回值说明：无
+*********************************************************************/
 void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 {
 	Coord mouse;
@@ -47,6 +54,10 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 			{
 				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\openMap.bmp");
 			}
+			if(strcmp(page,"make_map")==0)
+			{
+				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\makeMap.bmp");
+			}
 		while((ka=getch())!=13)
 		{
 			if(strcmp(page,"login")==0)
@@ -64,6 +75,10 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 			if(strcmp(page,"open_map")==0)
 			{
 				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\openMap.bmp");
+			}
+			if(strcmp(page,"make_map")==0)
+			{
+				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\makeMap.bmp");
 			}
 			if((ka>='0'&&ka<='9')||(ka>='a'&&ka<='z')||(ka>='A'&&ka<='Z')||ka==64||ka==46)
 			{	

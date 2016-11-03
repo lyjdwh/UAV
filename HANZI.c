@@ -4,12 +4,23 @@
 #include "HANZI.h"
 #include "SVGA.h"
 
+/********************************
+	功能说明：12*12点阵字母的显示
+	参数说明：
+		char *s 要显示的字符地址
+		int x        起始x坐標
+		int y        起始y坐標
+		int color    指定的颜色
+		int gap		 間隔
+		mode为0则横向输出，1则纵向输出
+	返回值说明:无 
+********************************/
 void PrintASC(char *s,int x,int y,int dx,int dy,short color)//dx为字距，dy为字体粗细
 {
 	char *s1;
 	unsigned long offset;
 	FILE *fp;
-	char buffer[16]; //buffer用来存储一个字符
+	char buffer[16]; 										//buffer用来存储一个字符
 	int m,n,i,j;
 	if ((fp=fopen("asc16","rb"))==NULL)
 	{
@@ -19,11 +30,11 @@ void PrintASC(char *s,int x,int y,int dx,int dy,short color)//dx为字距，dy为字体
 	s1=s;
 	while(*s)
 	{
-		offset=(*s)*16+1; //计算该字符在字库中偏移量
+		offset=(*s)*16+1; 									//计算该字符在字库中偏移量
 		fseek(fp,offset,SEEK_SET);
-		fread(buffer,16,1,fp); //取出字符16字节的点阵字模存入buffer中
+		fread(buffer,16,1,fp); 								//取出字符16字节的点阵字模存入buffer中
 
-		for(n=0;n<dx;n++) //将16位字节的点阵按位在屏幕上打印出来(1:打印,0:不打印),显示字符
+		for(n=0;n<dx;n++) 									//将16位字节的点阵按位在屏幕上打印出来(1:打印,0:不打印),显示字符
 		{
 			for(i=0;i<16;i++)
 			{
@@ -40,8 +51,8 @@ void PrintASC(char *s,int x,int y,int dx,int dy,short color)//dx为字距，dy为字体
 
 			}
 		}
-		s++; //一个字符内码占用一个字节
-		x+=8*dx;//字符间间隔
+		s++; 												//一个字符内码占用一个字节
+		x+=8*dx;											//字符间间隔
 	}
 	s=s1;
 	fclose(fp);

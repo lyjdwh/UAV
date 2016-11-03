@@ -1,6 +1,7 @@
 #ifndef _SHOW_H_
 #define _SHOW_H_
 
+#define BASEDIR  "c:\\borlandc\\bin\\uav\\"
 
 void UAVInit(UAVPara *para,UAVMap *map);
 void LoginCheck(UAVPara *para,Account * account,int * flag);

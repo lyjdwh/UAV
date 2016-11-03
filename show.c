@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <dos.h>
 #include <time.h>
 #include <conio.h>
+#include <dir.h>
 
 #include "head.h"
 #include "account.h"
@@ -16,7 +16,12 @@
 #include "button.h"
 #include "HANZI.h"
 
-
+/**************************************************************************
+功能说明：全局初始化设置
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+返回值说明：无
+**************************************************************************/
 void UAVInit(UAVPara *para,UAVMap *map)
 {
 
@@ -27,10 +32,10 @@ void UAVInit(UAVPara *para,UAVMap *map)
 	SetMousePosition(400,300);
 	para->mouse_buffer=(short *)malloc(32*16);
 	map->virtual_point=0;
-	map->diamod=3;
+
 	if(para->mouse_buffer==NULL)
 	{
-		ReturnMode();
+
 		printf("malloc error in function UAVInit\n");
 		getch();
 		exit(1);
@@ -39,8 +44,8 @@ void UAVInit(UAVPara *para,UAVMap *map)
 }
 /**************************************************************************
 功能说明：登录界面初始化设置
-参数说明：
-返回值说明：
+参数说明：无
+返回值说明：无
 **************************************************************************/
 void LoginInit()
 {
@@ -49,7 +54,13 @@ void LoginInit()
 	SetMousePosition(400,300);
 	
 }
-
+/**************************************************************************
+功能说明：登录界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
 void LoginCheck(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -93,12 +104,26 @@ void LoginCheck(UAVPara *para,Account *account,int *flag)
 
 	}
 }
+
+/**************************************************************************
+功能说明：注册界面初始化设置
+参数说明：无
+返回值说明：无
+**************************************************************************/
+
 void RegisterInit()
 {
 	ReadBmp(0,0,"back\\register.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+/**************************************************************************
+功能说明：注册 界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
 void RegisterCheck(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -151,12 +176,28 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
+
+/**************************************************************************
+功能说明：忘记密码界面1初始化设置
+参数说明：无
+返回值说明：无
+**************************************************************************/
+
 void Forget1Init()
 {
 	ReadBmp(0,0,"back\\forget1.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+
+/**************************************************************************
+功能说明：忘记密码界面1逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
+
 void Forget1Check(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -213,12 +254,27 @@ void Forget1Check(UAVPara *para,Account *account,int *flag)
 	}
 
 }
+
+/**************************************************************************
+功能说明：忘记密码界面2初始化设置
+参数说明：无
+返回值说明：无
+**************************************************************************/
+
 void Forget2Init()
 {
 	ReadBmp(0,0,"back\\forget2.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+/**************************************************************************
+功能说明：忘记密码界面2逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
+
 void Forget2Check(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -267,17 +323,24 @@ void Forget2Check(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
+
+/**************************************************************************
+功能说明：帮助界面初始化设置
+参数说明：char *page: 要显示的帮助页面
+返回值说明：
+**************************************************************************/
+
 void HelpInit(char *page)
 {	
-	if(strcmp(page,"login")==0)
+	if(strcmp(page,"login")==0)				//登录的帮助页面
 	{
-		ReadBmp(0,0,"back\\helpLog.bmp");
-	} else if(strcmp(page,"register")==0){
+		ReadBmp(0,0,"back\\helpLog.bmp");	
+	} else if(strcmp(page,"register")==0){	//注册的帮助页面
 		ReadBmp(0,0,"back\\helpR.bmp");
-	}else if(strcmp(page,"forget1")==0)
+	}else if(strcmp(page,"forget1")==0)		//忘记密码1的帮助页面
 	{
 		ReadBmp(0,0,"back\\helpCP1.bmp");	
-	}else if(strcmp(page,"forget2")==0)
+	}else if(strcmp(page,"forget2")==0)		//忘记密码2的帮助页面
 	{
 		ReadBmp(0,0,"back\\helpCP2.bmp");
 	}else if(strcmp(page,"main")==0)	//主页面的帮助界面
@@ -287,6 +350,14 @@ void HelpInit(char *page)
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+
+/**************************************************************************
+功能说明：帮助界面逻辑验证
+参数说明：char *page: 要显示的帮助页面
+			int *flag 要返回的页面标志位
+返回值说明：无
+**************************************************************************/
+
 void HelpCheck(char *page,int *flag)
 {	
 	Coord mouse;
@@ -319,9 +390,13 @@ void HelpCheck(char *page,int *flag)
 		}
 	}
 }
-/*
-1:用户已存在，2：用户不存在，3：密码错误，4：密码不一致,5:邮箱验证错误
-*/
+
+/**************************************************************************
+功能说明：错误界面初始化设置
+参数说明：int error错误信息 1:用户已存在，2：用户不存在，3：密码错误，4：密码不一致,5:邮箱验证错误
+返回值说明：无
+**************************************************************************/
+
 void ErrorInfo(int error)
 {	if(error==1)
 		ReadBmp(220,208,"back\\userE.bmp");
@@ -334,6 +409,13 @@ void ErrorInfo(int error)
 	else if(error==5)
 		ReadBmp(220,208,"back\\emailCE.bmp");
 }
+
+/**************************************************************************
+功能说明：错误界面逻辑验证
+参数说明：无
+返回值说明：无
+**************************************************************************/
+
 void ErrorCheck()
 {	
 	Coord mouse;
@@ -351,6 +433,13 @@ void ErrorCheck()
 		}
 	}
 }
+
+/**************************************************************************
+功能说明：主界面初始化设置
+参数说明：无
+返回值说明：无
+**************************************************************************/
+
 void MainInit()
 {
 	ReadBmp(0,0,"back\\app.bmp");
@@ -358,11 +447,39 @@ void MainInit()
 	SetMousePosition(400,300);
 }
 
+/**************************************************************************
+功能说明：主界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
+
 void MainCheck(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
 	char mouse_butt;
 	Account temp;
+	FILE *fmap,*flog;
+	int number;
+	char path[MAXLEN*3],path1[MAXLEN*3],dir[MAXLEN*3];
+	strcpy(path,BASEDIR);
+	strcat(path,"account\\");
+	strcat(path,account->user_name);
+	strcat(path,"\\map.list");
+	strcpy(path,BASEDIR);
+	strcat(path1,"account\\");
+	strcat(path1,account->user_name);
+	strcat(path1,"\\log.dat");
+	strcpy(path,BASEDIR);
+	strcat(dir,"account\\");
+	strcat(dir,account->user_name);
+	mkdir(dir);
+	fmap=fopen(path,"w");
+	flog=fopen(path1,"w");
+	fprintf(fmap,"%3d\t",0);
+	fprintf(flog,"%3d\t",0);
+	
 	while(1)
 	{
 		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
@@ -401,12 +518,25 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 	
 }
 
+/**************************************************************************
+功能说明：打开地图界面初始化
+参数说明：无
+返回值说明：无
+**************************************************************************/
 void OpenMapInit()
 {
 	ReadBmp(0,0,"back\\openMap.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+
+/**************************************************************************
+功能说明：打开地图界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
 
 void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 {
@@ -425,7 +555,8 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 	FILE *fmap;
 	char file_name[MAXLEN];//要显示的file_name 
 	char file_name1[MAXLEN];//要打开的file_name
-	char path[MAXLEN*2];
+	char path[MAXLEN*4];
+	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
 	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
@@ -435,10 +566,14 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 		fmap=fopen(path,"w+");
 	}
 	fscanf(fmap,"%3d\t",&number);//number存储地图的数目
+	rewind(fmap);
+	if(number<0)
+	{
+		fprintf(fmap,"%3d\t",0);
+		number=0;
+	}
 	page_number=1+number/(n*2);
 	show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
-	if(number==0)
-		show_number=0;
 	for(i=0;i<showed_number;i++)
 		fscanf(fmap,"%s\t",file_name);
 	for(i=0;i<show_number;i++)
@@ -449,8 +584,6 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 	showed_number=showed_number+show_number;
 	perpage_number=show_number;
 	show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
-	if(number==0)
-		show_number=0;
 	for(i=0;i<show_number;i++)
 	{
 		
@@ -486,8 +619,6 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 				postpage_number=perpage_number;
 			page=new_page;
 			show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
-			if(number-showed_number==0)
-				show_number=0;
 			fscanf(fmap,"%3d\t",&number);//number存储地图的数目
 			for(i=0;i<showed_number;i++)
 				fscanf(fmap,"%s\t",file_name);
@@ -499,8 +630,6 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 			showed_number=showed_number+show_number;
 			perpage_number=show_number;
 			show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
-			if(number-showed_number==0)
-				show_number=0;
 			for(i=0;i<show_number;i++)
 			{
 				
@@ -520,12 +649,26 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
+/**************************************************************************
+功能说明：日志界面初始化
+参数说明：无
+返回值说明：无
+**************************************************************************/
 void LogInit()
 {
 	ReadBmp(0,0,"back\\logs.bmp");
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+
+/**************************************************************************
+功能说明：日志界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
+
 void LogCheck(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -577,7 +720,7 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 		if(new_page!=page)
 		{
 			page=new_page;
-			fscanf(log,"%3d\t",&number);//number存储地图的数目
+			fscanf(log,"%3d\t",&number);	//number存储地图的数目
 			page_number=1+number/n;
 			for(i=0;i<(page-1)*n;i++)
 				fscanf(log,"%s\t",content);
@@ -589,5 +732,73 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 			rewind(log);
 		}
 			
+	}
+}
+/**************************************************************************
+功能说明：生成地图界面初始化
+参数说明：无
+返回值说明：无
+**************************************************************************/
+void MakeMapInit()
+{
+	ReadBmp(0,0,"back\\makeMap.bmp");
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+
+void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag)
+{
+	Coord mouse;
+	char mouse_butt;
+	char map_scale[20]={""};
+	char precison[20]={""};
+	char virtual_point[20]={""};
+	char map_name[20]={""};
+	char height[20]={""};
+	int l1,l2,l3,l4,l5;
+	while(1)
+	{
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,para->mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,para->mouse_buffer);
+		TextBox(255,170,380,200,map_scale,1,"make_map");
+		TextBox(575,170,700,205,height,1,"make_map");
+		TextBox(255,240,380,275,precison,1,"make_map");
+		TextBox(580,240,700,270,virtual_point,1,"make_map");
+		TextBox(255,310,705,335,map_name,1,"make_map");
+		map->map_scale=atoi(map_scale);
+		map->precison=atoi(precison);
+		map->virtual_point=atoi(virtual_point);
+		map->height=atoi(height);
+		strcpy(map->map,map_name);
+		if(Button(245,445,395,505)==1)
+		{
+			//帮助
+		}
+		if(Button(440,445,585,505)==1)
+		{
+			l1=strlen(map_scale);
+			l2=strlen(precison);
+			l3=strlen(virtual_point);
+			l4=strlen(map_name);
+			l5=strlen(height);
+			if(l1!=0&&l2!=0&&l3!=0&&l4!=0&&l5!=0)
+			{
+				*flag=10;
+				return ;
+			}else{
+				PrintHZ16(225,210,"有重要信息未填写",0xffff,1,1);
+				getch();
+				ReadPartBMP(225,210,225,210,400,60,"back\\makeMap.bmp");
+				
+			}
+			
+		}
+		if(Button(40,50,110,115))
+		{
+			*flag=4;
+			return;
+		}
 	}
 }
