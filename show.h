@@ -2,7 +2,7 @@
 #define _SHOW_H_
 
 
-void UAVInit(UAVPara *para);
+void UAVInit(UAVPara *para,UAVMap *map);
 void LoginCheck(UAVPara *para,Account * account,int * flag);
 void LoginInit();
 void RegisterInit();
@@ -15,6 +15,11 @@ void HelpInit(char *page);
 void HelpCheck(char *page,int *flag);
 void ErrorInfo(int error);
 void ErrorCheck();
-
+void OpenMapCheck(UAVPara *para,Account *account,int *flag);
+void OpenMapInit();
+void MainCheck(UAVPara *para,Account *account,int *flag);
+void MainInit();
+void LogInit();
+void LogCheck(UAVPara *para,Account *account,int *flag);
 
 #endif

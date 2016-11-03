@@ -43,6 +43,10 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 			{
 				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\forget2.bmp");
 			}
+			if(strcmp(page,"open_map")==0)
+			{
+				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\openMap.bmp");
+			}
 		while((ka=getch())!=13)
 		{
 			if(strcmp(page,"login")==0)
@@ -56,6 +60,10 @@ void TextBox(int x1,int y1,int x2,int y2,char *str,int flag,char *page)
 			if(strcmp(page,"forget")==0)
 			{
 				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\forget1.bmp");
+			}
+			if(strcmp(page,"open_map")==0)
+			{
+				ReadPartBMP(x1,y1,x1,y1,220,35,"back\\openMap.bmp");
 			}
 			if((ka>='0'&&ka<='9')||(ka>='a'&&ka<='z')||(ka>='A'&&ka<='Z')||ka==64||ka==46)
 			{	

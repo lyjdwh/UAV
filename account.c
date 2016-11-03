@@ -31,7 +31,7 @@ void AddAccount(Account p)
 	fp = fopen(USERFILE, "r+");
 	if (fp == NULL)
 	{	
-		ReturnMode();
+		
 		printf("can't open %s\n",USERFILE);
 		getch();
 		exit(1);
@@ -39,7 +39,7 @@ void AddAccount(Account p)
 	tfp = fopen(TUSERFILE, "r+");
 	if (tfp == NULL)
 	{	
-		ReturnMode();
+		
 		printf("can't open %s\n",TUSERFILE);
 		getch();
 		exit(1);
@@ -78,7 +78,7 @@ void SearchAccount(Account * p)
 	fp = fopen(USERFILE, "r+");
 	if (fp == NULL)
 	{	
-		ReturnMode();
+	
 		printf("can't open %s\n",USERFILE);
 		getch();
 		exit(1);
@@ -86,7 +86,7 @@ void SearchAccount(Account * p)
 	tfp = fopen(TUSERFILE, "r+");
 	if (tfp == NULL)
 	{	
-		ReturnMode();
+
 		printf("can't open %s\n",TUSERFILE);
 		getch();
 		exit(1);
@@ -131,7 +131,7 @@ int SearchName(Account *p)
 	fp = fopen(USERFILE, "r+");
 	if (fp == NULL)
 	{	
-		ReturnMode();
+	
 		printf("can't open %s\n",USERFILE);
 		getch();
 		exit(1);
@@ -209,7 +209,7 @@ void ChangePassword(Account p)
 	fp = fopen(USERFILE, "r+");
 	if (fp == NULL)
 	{	
-		ReturnMode();
+	
 		printf("can't open %s\n",USERFILE);
 		getch();
 		exit(1);
@@ -217,7 +217,7 @@ void ChangePassword(Account p)
 	tfp = fopen(TUSERFILE, "r+");
 	if (tfp == NULL)
 	{	
-		ReturnMode();
+	
 		printf("can't open %s\n",TUSERFILE);
 		getch();
 		exit(1);
@@ -250,7 +250,7 @@ void ReadCurrentAccount(Account *p)
 	tfp = fopen(TUSERFILE, "r+");
 	if (tfp == NULL)
 	{	
-		ReturnMode();
+	
 		printf("can't open %s\n",TUSERFILE);
 		getch();
 		exit(1);

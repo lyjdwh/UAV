@@ -21,10 +21,11 @@ void main()
 {
 	int flag=1;
 	UAVPara para;
+	UAVMap map;
 	Account account;
 	account.message=0;
 	strcpy(account.user_name,"");
-	UAVInit(&para);
+	UAVInit(&para,&map);
 	while(1)
 	{
 		if(flag==1)												//登录
@@ -44,7 +45,9 @@ void main()
 		}
 		if(flag==4)												//进入界面
 		{
-			exit(1);
+			
+			MainInit();
+			MainCheck(&para,&account,&flag);
 			
 		}
 		if(flag==5)												//帮助
@@ -55,6 +58,20 @@ void main()
 		{
 			Forget2Init();
 			Forget2Check(&para,&account,&flag);
+		}
+		if(flag==7)
+		{
+			OpenMapInit();
+			OpenMapCheck(&para,&account,&flag);
+		}
+		if(flag==9)
+		{
+			LogInit();
+			LogCheck(&para,&account,&flag);
+		}
+		if(flag==10)
+		{
+			exit(1);						//地图显示页面
 		}
 
 	}
