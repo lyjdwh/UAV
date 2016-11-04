@@ -371,7 +371,7 @@ void HelpCheck(char *page,int *flag)
 		MouseReshow(&mouse,mouse_buffer);
 		
 			if(Button(40,50,110,115)==1)
-		{
+			{
 				if(strcmp(page,"login")==0)
 			{
 				*flag=1;
@@ -475,10 +475,24 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 	strcat(dir,"account\\");
 	strcat(dir,account->user_name);
 	mkdir(dir);
-	fmap=fopen(path,"w");
-	flog=fopen(path1,"w");
-	fprintf(fmap,"%3d\t",0);
-	fprintf(flog,"%3d\t",0);
+	if(fopen(path,"r+")==NULL)
+	{
+		fmap=fopen(path,"w");
+		rewind(fmap);
+		fprintf(fmap,"%3d\t",0);
+		fclose(fmap);
+	}
+		
+	if(fopen(path1,"r+")==NULL)
+	{
+		flog=fopen(path1,"w");
+		rewind(flog);
+		fprintf(flog,"%3d\t",0);
+		fclose(fmap);
+	}
+		
+	
+	
 	
 	while(1)
 	{
@@ -488,7 +502,7 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 		MouseReshow(&mouse,para->mouse_buffer);
 		if(Button(60,180,200,310)==1)
 		{
-			*flag=7;		//打开地图页面标志位
+			*flag=11;		//打开地图页面标志位
 			break;
 		}
 		if(Button(220,180,365,310)==1)
@@ -564,14 +578,12 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 	if(fmap==NULL)
 	{
 		fmap=fopen(path,"w+");
-	}
-	fscanf(fmap,"%3d\t",&number);//number存储地图的数目
-	rewind(fmap);
-	if(number<0)
-	{
 		fprintf(fmap,"%3d\t",0);
 		number=0;
-	}
+	}else 
+		fscanf(fmap,"%3d\t",&number);//number存储地图的数目
+	
+	rewind(fmap);
 	page_number=1+number/(n*2);
 	show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
 	for(i=0;i<showed_number;i++)
@@ -601,7 +613,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 		MouseReshow(&mouse,para->mouse_buffer);
 		if(Button(40,50,110,115)==1)
 		{
-			*flag=4;
+			*flag=11;
 			break;
 		}
 		
@@ -675,24 +687,35 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 	char mouse_butt;
 	Account temp;
 	FILE *log;
-	char path[MAXLEN*2];
-	char content[MAXLEN*2];//log 内容
+	char path[MAXLEN*3];
+	char content[MAXLEN*3];//log 内容
 	int page=1;
 	int new_page=1;
 	int n=5,i;
 	int page_number;//页数
 	int number;
+	int per_number;
+	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
-	strcat(path,"\\log.log");
+	strcat(path,"\\log.dat");
 	log=fopen(path,"r+");
 	if(log==NULL)
+	{
 		log=fopen(path,"w+");
-	fscanf(log,"%3d\t",&number);//number存储地图的数目
+		fprintf(log,"%3d\t",0);
+		number=0;
+	}else
+		fscanf(log,"%3d\t",&number);//number存储地图的数目
+		
+	
 	page_number=1+number/n;
 	for(i=0;i<(page-1)*n;i++)
 		fscanf(log,"%s\t",content);
-	for(i=0;i<n;i++)
+	per_number=(number-(page-1)*n)%n==0?n:number%n;
+	if((number-(page-1)*n)==0)
+		per_number=0;
+	for(i=0;i<per_number;i++)
 	{
 		fscanf(log,"%s\t",content);
 		PrintASC(content,140,165+i*40,1,1,0x0000);
@@ -721,10 +744,12 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 		{
 			page=new_page;
 			fscanf(log,"%3d\t",&number);	//number存储地图的数目
-			page_number=1+number/n;
 			for(i=0;i<(page-1)*n;i++)
 				fscanf(log,"%s\t",content);
-			for(i=0;i<n;i++)
+			per_number=(number-(page-1)*n)/n==0?n:number%n;
+			if((number-(page-1)*n)==0)
+				per_number=0;
+			for(i=0;i<per_number;i++)
 			{
 				fscanf(log,"%s\t",content);
 				PrintASC(content,140,165+i*40,1,1,0x0000);
@@ -802,3 +827,42 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag)
 		}
 	}
 }
+/**************************************************************************
+功能说明：选择界面初始化
+参数说明：无
+返回值说明：无
+**************************************************************************/
+void ChooseInit()
+{
+	ReadBmp(0,0,"back\\choose.bmp");
+	SetMouseRange(0,0,800,600);
+	SetMousePosition(400,300);
+}
+void ChooseCheck(UAVPara *para,Account *account,int *flag)
+{
+	Coord mouse;
+	char mouse_butt;
+	Account temp;
+	while(1)
+	{
+		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
+		MouseCopy(&mouse,para->mouse_buffer);
+		MouseShow(&mouse);
+		MouseReshow(&mouse,para->mouse_buffer);
+		if(Button(40,50,110,115)==1)
+		{
+			*flag=4;//返回打开地图页面
+			return ;
+		}
+		if(Button(240,220,370,350))
+		{
+			//城市
+		}
+		if(Button(490,220,630,350))
+		{
+			*flag=7;
+			return ;//山地，田野
+		}
+	}
+}
+		

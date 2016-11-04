@@ -78,6 +78,11 @@ void main()
 		{
 			exit(1);						
 		}
+		if(flag==11)											//选择页面
+		{
+			ChooseInit();
+			ChooseCheck(&para,&account,&flag);
+		}
 
 
 	}

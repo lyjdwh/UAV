@@ -22,5 +22,7 @@ void MainCheck(UAVPara *para,Account *account,int *flag);
 void MainInit();
 void LogInit();
 void LogCheck(UAVPara *para,Account *account,int *flag);
+void ChooseCheck(UAVPara *para,Account *account,int *flag)；
+void ChooseInit()；
 
 #endif

@@ -249,7 +249,7 @@ char ReadBmp(int x,int y,char *FileName)
 		ReturnMode();
 		printf("Cannot read the picture\n\t\t%s",FileName);
 		getch();
-		return 0;
+		exit(1);
 	}
 	 																/*  ¶ÁÎÄ¼şÍ· */
 	if (fread((char *)&FileHeader, sizeof(FileHeader), 1, fp) != 1)
@@ -349,7 +349,7 @@ char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName)
 		ReturnMode();
 		printf("Cannot read the picture\n\t\t%s",FileName);
         getch();
-        return 0;
+        exit(1);
     }
 
 
