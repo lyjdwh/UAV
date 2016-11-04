@@ -62,12 +62,12 @@ void main()
 		if(flag==7)												//打开地图
 		{
 			OpenMapInit();
-			OpenMapCheck(&para,&account,&flag);
+			OpenMapCheck(&para,&account,&flag,&map);
 		}
 		if(flag==8)											//生成地图
 		{
 			MakeMapInit();
-			MakeMapCheck(&para,&map,&flag);
+			MakeMapCheck(&para,&map,&flag,&account);
 		}
 		if(flag==9)												//日志
 		{

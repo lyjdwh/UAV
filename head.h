@@ -10,7 +10,7 @@ typedef struct UAVMap
 	unsigned int map_scale;	//地图大小,2^n+1
 	char precison;			//地图精细度
 	int virtual_point;		//虚拟点高度,默认值为0
-	char map[20];		//地图文件名
+	char map[60];		//地图文件名
 	int height;			//地图4个角点高度
 
 } UAVMap;

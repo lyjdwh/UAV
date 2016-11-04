@@ -552,7 +552,7 @@ void OpenMapInit()
 返回值说明：无
 **************************************************************************/
 
-void OpenMapCheck(UAVPara *para,Account *account,int *flag)
+void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 {
 	Coord mouse;
 	int page=1;
@@ -573,6 +573,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
+	strcpy(map->map,path);
 	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
 	fmap=fopen(path,"r+");
 	if(fmap==NULL)
@@ -654,8 +655,11 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag)
 			rewind(fmap);
 		}
 		TextBox(210,500,560,540,file_name1,1,"open_map");
+		
 		if(strlen(file_name1)>0&&Button(585,500,680,540)==1)//确认
 		{
+			strcat(map->map,file_name);
+			strcat(map->map,"mapdat");
 			*flag=10;								//地图显示页面
 			break;
 		}
@@ -771,16 +775,36 @@ void MakeMapInit()
 	SetMousePosition(400,300);
 }
 
-void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag)
+void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 {
 	Coord mouse;
+	FILE *fmap;
 	char mouse_butt;
+	char path[MAXLEN*3];
 	char map_scale[20]={""};
 	char precison[20]={""};
 	char virtual_point[20]={""};
 	char map_name[20]={""};
 	char height[20]={""};
-	int l1,l2,l3,l4,l5;
+	char file_name[30];
+	int l1,l2,l3,l4,l5,i;
+	int number;//地图的数目
+	strcpy(map->map,BASEDIR);
+	strcat(map->map,"account\\");
+	strcat(map->map,account->user_name);
+	strcpy(path,BASEDIR);
+	strcat(path,"account\\");
+	strcat(path,account->user_name);
+	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
+	fmap=fopen(path,"r+");
+	if(fmap==NULL)
+	{
+		fmap=fopen(path,"w+");
+		fprintf(fmap,"%3d\t",0);
+		number=0;
+	}else 
+		fscanf(fmap,"%3d\t",&number);//number存储地图的数目
+	rewind(fmap);
 	while(1)
 	{
 		ReadMouse(&mouse.x,&mouse.y,&mouse_butt);
@@ -796,7 +820,7 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag)
 		map->precison=atoi(precison);
 		map->virtual_point=atoi(virtual_point);
 		map->height=atoi(height);
-		strcpy(map->map,map_name);
+	
 		if(Button(245,445,395,505)==1)
 		{
 			//帮助
@@ -810,6 +834,13 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag)
 			l5=strlen(height);
 			if(l1!=0&&l2!=0&&l3!=0&&l4!=0&&l5!=0)
 			{
+				strcat(map->map,map_name);
+				strcat(map->map,".mapdat");
+				fprintf(fmap,"%3d\t",number+1);
+				for(i=0;i<number;i++)
+					fscanf(fmap,"%s\t",file_name);
+				strcpy(file_name,map_name);
+				fprintf(fmap,"%s\t",file_name);
 				*flag=10;
 				return ;
 			}else{
@@ -865,4 +896,37 @@ void ChooseCheck(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
-		
+void DeleteMap(Account *account)
+{
+	char path[MAXLEN*3];
+	
+	int number;
+	FILE *fmap;
+	strcpy(path,BASEDIR);
+	strcat(path,"account\\");
+	strcat(path,account->user_name);
+	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
+	fmap=fopen(path,"r+");
+	fscanf(fmap,"%3d\t",&number);
+	fprintf(fmap,"%3d\t",number-1);
+}
+void AddLog(Account *account,char *log)
+{
+	char path[MAXLEN*4];
+	char temp[MAXLEN*2];
+	int number,i;
+	FILE *flog;
+	strcpy(path,BASEDIR);
+	
+	strcat(path,"account\\");
+	strcat(path,account->user_name);
+	strcat(path,"\\log.dat");	//格式为%3d\t%s\t%s\t.....
+	flog=fopen(path,"r+");
+	fscanf(flog,"%3d\t",&number);
+	for(i=0;i<number;i++)
+		fscanf(flog,"%s\t",temp);
+	fscanf(flog,"%s\t",log);
+	rewind(flog);
+	fprintf(flog,"%3d\t",number+1);
+	fclose(flog);
+}		
