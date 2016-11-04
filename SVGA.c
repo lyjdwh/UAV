@@ -26,7 +26,7 @@ void  PutPixel(int  x,int  y,short color)
 	long pos;
 	short far *video_buffer=(short far *)0xA0000000L;
 	register new_page=0;
-	pos = y* 1600L + x;
+	pos = y* 800L + x;
 	new_page = pos >>15;
 	pos = pos& 0x0000ffffL;
 	SelectPage(new_page);
@@ -47,7 +47,7 @@ short int GetPixel(int x, int y)
 	short color;
 	short far *video_buffer= (short far *)0xA0000000L;
 	register int new_page =  0;
-	pos = y*16001 +x;
+	pos = y*8001 +x;
 	new_page = pos >> 15;
 	pos = pos & 0x0000ffffL;
 	SelectPage(new_page);
@@ -69,12 +69,12 @@ void XLine(int x,int y,int length, int color)
 	long pos;
 	int new_page =0 ,old_page=0;
 	short far * video_buffer = (short far *)0xA0000000L;
-	pos = y *16001 +x;
+	pos = y *8001 +x;
 	old_page = pos >> 15;
 	SelectPage(old_page);
 	for(i=0 ;i<length ;i++)
 	{
-		pos= y*16001 +x+i;
+		pos= y*8001 +x+i;
 		new_page = pos >>15;
 		if( new_page !=old_page)
 		{
@@ -100,12 +100,12 @@ void YLine(int x,int y,int length, int color)
 	long pos;
 	int new_page =0 ,old_page=0;
 	short far * video_buffer = (short far *)0xA0000000L;
-	pos = y *16001 +x;
+	pos = y *8001 +x;
 	old_page = pos >> 15;
 	SelectPage(old_page);
 	for(i=0 ;i<length ;i++)
 	{
-		pos= (y+i)*16001 +x;
+		pos= (y+i)*8001 +x;
 		new_page = pos >>15;
 		if( new_page !=old_page)
 		{
@@ -292,7 +292,7 @@ char ReadBmp(int x,int y,char *FileName)
 
    
 	k=(width*2%4)?(4-width*2%4):0;									/*计算偏移量，windos只能读取4的整数倍字节*/
-	old_page=((height-1+y)*16001+x)>>15;							/*计算显示页*/
+	old_page=((height-1+y)*8001+x)>>15;							/*计算显示页*/
 	new_page=old_page;
     SelectPage(old_page);   
 	for(i=height-1;i>=0;i--)
@@ -300,7 +300,7 @@ char ReadBmp(int x,int y,char *FileName)
 		fread(buffer,width*2+k,1,fp); 								//读取一行像素点的信息
         for(j=0;j<width;j++)     									//把读取的一行像素点显示出来
         {
-			pos=((i+y)*1600l+j+x);									/*计算要显示点的显示位置POSITION*/
+			pos=((i+y)*800l+j+x);									/*计算要显示点的显示位置POSITION*/
             new_page=pos>>15;										/*计算显示页*/
 			pos=pos&0x0000ffffl;									/*计算在一个页面上的偏移位置，整除65536的快速方案*/
             if(new_page!=old_page)//换页
@@ -392,8 +392,8 @@ char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName)
 	}
 
    																			 /*设置宽高限制*/
-    if ((w + x) > 1600)
-        ResX = 1600 - x;
+    if ((w + x) > 800)
+        ResX = 800 - x;
     else ResX = w;
 	if ((h + y) > 600)
         ResY = 600 - y;
@@ -405,7 +405,7 @@ char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName)
 
 
 	fseek(fp,data_offset+linebytes*(height-y0-h)+x0*2L,SEEK_SET);
-	old_page=((h-1+y)*1600l+x)>>15;
+	old_page=((h-1+y)*800l+x)>>15;
 	new_page=old_page;
     SelectPage(old_page);   
 	for(i=h-1;i>=0;i--)
@@ -415,7 +415,7 @@ char ReadPartBMP(int x,int y,int x0,int y0,int w,int h,char *FileName)
 		{
 		  for(j=0;j<ResX;j++)     											//把读取的一行像素点显示出来
 		  {
-			 pos=((i+y)*1600l+j+x);
+			 pos=((i+y)*800l+j+x);
 			 new_page=pos>>15;
 			 if(new_page!=old_page)											/*Change Pages!!!*/
 			 {

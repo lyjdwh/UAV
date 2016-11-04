@@ -26,7 +26,7 @@ void UAVInit(UAVPara *para,UAVMap *map)
 {
 
 	SetSVGAMode(0x113);
-	SetScreenWidth(1600L);
+	SetScreenWidth(800L);
 	MouseInit();
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
