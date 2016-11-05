@@ -209,7 +209,6 @@ void AddInformation(
 				   )
 {
 	FILE *map;
-		ConstructeStr("µØÍ¼¹æÄ££º","(d,d)" , *map_scale , *precision , 580 , 50);
 	map = fopen(map_str , "ab+");
 	fseek(map , 0l , 2);
 	fwrite(map_scale , sizeof(int) , 1 , map);

@@ -477,7 +477,7 @@ void ConstructeStr(
 	char display[20] = "", loop = 0;
 	char data_str_1[6] , data_str_2[6] ;
 	char flag = 0;
-	const int color = 0xffff;
+	const int color = 0x0001;
 	
 	itoa(data_1 , data_str_1 , 10);
 	itoa(data_2 , data_str_2 , 10);
