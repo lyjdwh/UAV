@@ -746,13 +746,19 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 	page_number=1+number/n;
 	for(i=0;i<(page-1)*n;i++)
 		fscanf(log,"%s\t",content);
-	per_number=(number-(page-1)*n)%n==0?n:number%n;
+	per_number=(number-(page-1)*n)/n==0?number%n:n;
 	if((number-(page-1)*n)==0)
 		per_number=0;
 	for(i=0;i<per_number;i++)
 	{
 		fscanf(log,"%s\t",content);
-		PrintASC(content,140,165+i*40,1,1,0x0000);
+		if(strcmp(content,"ADD")==0)
+			PrintASC("add a map",140,165+i*40,1,1,0x0000);
+		else if(strcmp(content,"Delete")==0)
+			PrintASC("delete a map",140,165+i*40,1,1,0x0000);
+		else if(strcmp(content,"Read")==0)
+			PrintASC("read a map",140,165+i*40,1,1,0x0000);
+		
 	}
 	rewind(log);
 	while(1)
@@ -776,17 +782,24 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 			new_page++;
 		if(new_page!=page)
 		{
+			ReadPartBMP(110,140,110,140,575,275,"back\\logs.bmp");
 			page=new_page;
 			fscanf(log,"%3d\t",&number);	//number存储地图的数目
 			for(i=0;i<(page-1)*n;i++)
 				fscanf(log,"%s\t",content);
-			per_number=(number-(page-1)*n)/n==0?n:number%n;
+			per_number=(number-(page-1)*n)/n==0?number%n:n;
 			if((number-(page-1)*n)==0)
 				per_number=0;
 			for(i=0;i<per_number;i++)
 			{
+				
 				fscanf(log,"%s\t",content);
-				PrintASC(content,140,165+i*40,1,1,0x0000);
+				if(strcmp(content,"ADD")==0)
+					PrintASC("add a map",140,165+i*40,1,1,0x0000);
+				else if(strcmp(content,"Delete")==0)
+					PrintASC("delete a map",140,165+i*40,1,1,0x0000);
+				else if(strcmp(content,"Read")==0)
+					PrintASC("read a map",140,165+i*40,1,1,0x0000);
 			}
 			rewind(log);
 		}
@@ -804,6 +817,13 @@ void MakeMapInit()
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+/**************************************************************************
+功能说明：生成地图界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
 void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 {
 	Coord mouse;
@@ -909,6 +929,13 @@ void ChooseInit()
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
+/**************************************************************************
+功能说明：选择界面逻辑验证
+参数说明：UAVPara *para:全局环境变量
+		  Account *account 账户信息
+		  int *flag页面标志位
+返回值说明：无
+**************************************************************************/
 void ChooseCheck(UAVPara *para,Account *account,int *flag)
 {
 	Coord mouse;
@@ -928,6 +955,8 @@ void ChooseCheck(UAVPara *para,Account *account,int *flag)
 		if(Button(240,220,370,350))
 		{
 			//城市
+			*flag=13;
+			return ;
 		}
 		if(Button(490,220,630,350))
 		{
@@ -936,6 +965,13 @@ void ChooseCheck(UAVPara *para,Account *account,int *flag)
 		}
 	}
 }
+/**************************************************************************
+功能说明：删除一个地图
+参数说明：
+		  Account *account 账户信息
+		
+返回值说明：无
+**************************************************************************/
 void DeleteMap(Account *account)
 {
 	char path[MAXLEN*3];
@@ -948,8 +984,18 @@ void DeleteMap(Account *account)
 	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
 	fmap=fopen(path,"r+");
 	fscanf(fmap,"%3d\t",&number);
+	rewind(fmap);
 	fprintf(fmap,"%3d\t",number-1);
+	fclose(fmap);
 }
+
+/**************************************************************************
+功能说明：添加一条日志
+参数说明：
+		  Account *account 账户信息
+		  int *log 要添加的日志信息
+返回值说明：无
+**************************************************************************/
 void AddLog(Account *account,char *log)
 {
 	char path[MAXLEN*4];
@@ -969,7 +1015,15 @@ void AddLog(Account *account,char *log)
 	rewind(flog);
 	fprintf(flog,"%3d\t",number+1);
 	fclose(flog);
-}		
+}	
+
+/**************************************************************************
+功能说明：判断文件是否存在
+参数说明：
+		  Account *account 账户信息
+		  char *file_name 要查找的文件
+返回值说明：1：存在 0：不存在
+**************************************************************************/	
 int IsFileExisted(Account *account,char *file_name)
 {
 	int number,temp;

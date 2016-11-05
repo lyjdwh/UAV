@@ -1098,6 +1098,7 @@ void AskDelete()
 int MouseProcess(
 				char *flag , 
 				char *str ,
+				int *return_flag ,
 				Account *account
 				)
 {
@@ -1130,7 +1131,7 @@ int MouseProcess(
 			setvect(0x09 , KeyInterrupt);
 			return 1;
 		}
-		if(Button(345,510,450,550)==1)//É¾³ý
+		if((Button(345,510,450,550)==1)&&((*return_flag)!=13)) //É¾³ý
 		{
 			FILE *delete_map;
 			if(!(delete_map = fopen(str , "w")))
@@ -1293,16 +1294,21 @@ char ReadOrder(
 					count = 0;
 				}
 			}
-			else
-			if((*return_flag) == 13)
-				while((ch == 'q') || (ch == 'Q'))
-					ch = getch();
+			else if((*return_flag) == 13)
+					while(1)
+					{
+						ch = getch();
+						if((ch == 'q') || (ch == 'Q') || (ch == 'e') || (ch == 'E'))
+						;
+						else 
+						break;
+					}					
 			else 
 				ch = getch();
 			switch(ch)
 			{
 				case 13:
-						target = MouseProcess(&flag , str , account);
+						target = MouseProcess(&flag , str , return_flag , account);
 						switch(target)
 						{
 							case 0:
