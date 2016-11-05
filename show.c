@@ -345,7 +345,10 @@ void HelpInit(char *page)
 		ReadBmp(0,0,"back\\helpCP2.bmp");
 	}else if(strcmp(page,"main")==0)	//主页面的帮助界面
 	{
-		ReadBmp(0,0,"back\\app.bmp");
+		ReadBmp(0,0,"back\\HelpC.bmp");
+	}else if(strcmp(page,"make_map")==0)	//主页面的帮助界面
+	{
+		ReadBmp(0,0,"back\\HelpS.bmp");//生成地图的帮助页面
 	}
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
@@ -386,14 +389,24 @@ void HelpCheck(char *page,int *flag)
 			{
 				*flag=6;
 				break;
+			}else if(strcmp(page,"make_map")==0)
+			{
+				*flag=8;
+				break;
+			}else if(strcmp(page,"main")==0)
+			{
+				*flag=4;
+				break;
 			}
+		
 		}
 	}
 }
 
 /**************************************************************************
 功能说明：错误界面初始化设置
-参数说明：int error错误信息 1:用户已存在，2：用户不存在，3：密码错误，4：密码不一致,5:邮箱验证错误
+参数说明：int error错误信息 1:用户已存在，2：用户不存在，3：密码错误，4：密码不一致,5:邮箱验证错误,6数据格式错误
+							7.文件已存在，8：文件不存在
 返回值说明：无
 **************************************************************************/
 
@@ -408,6 +421,13 @@ void ErrorInfo(int error)
 		ReadBmp(220,208,"back\\diffP.bmp");
 	else if(error==5)
 		ReadBmp(220,208,"back\\emailCE.bmp");
+	else if(error==6)
+		ReadBmp(220,208,"back\\ErrorD.bmp");
+	else if(error==7)
+		ReadBmp(220,208,"back\\FileE.bmp");
+	else if(error==8)
+		ReadBmp(220,208,"back\\ErrorF.bmp");
+	
 }
 
 /**************************************************************************
@@ -517,8 +537,12 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 		}
 		if(Button(220,325,370,400)==1)
 		{
-							//帮助  ##############################
-		}
+			
+			HelpInit("main");
+			HelpCheck("main",flag);
+			return;
+		}				//帮助  ##############################
+		
 		if(Button(220,410,365,480)==1)
 		{
 			exit(1);		//退出
@@ -574,6 +598,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
 	strcpy(map->map,path);
+	strcat(map->map,"\\");
 	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
 	fmap=fopen(path,"r+");
 	if(fmap==NULL)
@@ -584,7 +609,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 	}else 
 		fscanf(fmap,"%3d\t",&number);//number存储地图的数目
 	
-	rewind(fmap);
+
 	page_number=1+number/(n*2);
 	show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
 	for(i=0;i<showed_number;i++)
@@ -615,7 +640,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 		if(Button(40,50,110,115)==1)
 		{
 			*flag=11;
-			break;
+			return;
 		}
 		
 		if(page>1&&Button(190,435,290,470)==1)
@@ -655,14 +680,19 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 			rewind(fmap);
 		}
 		TextBox(210,500,560,540,file_name1,1,"open_map");
-		
-		if(strlen(file_name1)>0&&Button(585,500,680,540)==1)//确认
+		if(Button(585,500,680,540)==1&&IsFileExisted(account,file_name1)==0)
 		{
-			strcat(map->map,file_name);
-			strcat(map->map,"mapdat");
-			*flag=10;								//地图显示页面
+			ErrorInfo(8);
+			ErrorCheck();
+			ReadPartBMP(220,208,220,208,360,184,"back\\openMap.bmp");
+		}else if(Button(585,500,680,540)==1&&IsFileExisted(account,file_name1)==1)
+		{
+			strcat(map->map,file_name1);
+			strcat(map->map,".mapdat");
+			*flag=12;								//地图显示页面
 			break;
 		}
+
 	}
 }
 /**************************************************************************
@@ -774,7 +804,6 @@ void MakeMapInit()
 	SetMouseRange(0,0,800,600);
 	SetMousePosition(400,300);
 }
-
 void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 {
 	Coord mouse;
@@ -792,6 +821,7 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 	strcpy(map->map,BASEDIR);
 	strcat(map->map,"account\\");
 	strcat(map->map,account->user_name);
+	strcat(map->map,"\\");
 	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
@@ -823,40 +853,50 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 	
 		if(Button(245,445,395,505)==1)
 		{
+	
+			HelpInit("make_map");
+			HelpCheck("make_map",flag);
+			return;
+	
 			//帮助
 		}
 		if(Button(440,445,585,505)==1)
 		{
-			l1=strlen(map_scale);
-			l2=strlen(precison);
-			l3=strlen(virtual_point);
-			l4=strlen(map_name);
-			l5=strlen(height);
-			if(l1!=0&&l2!=0&&l3!=0&&l4!=0&&l5!=0)
+			if(map->map_scale<=0||map->precison<0||map->precison>3||map->height<=0||map->virtual_point<0)
 			{
+				ErrorInfo(6);
+				ErrorCheck();
+				ReadPartBMP(80,145,80,145,650,275,"back\\makeMap.bmp");
+			}else if(IsFileExisted(account,map_name)==1)
+			{
+				ErrorInfo(7);
+				ErrorCheck();
+				ReadPartBMP(80,145,80,145,650,275,"back\\makeMap.bmp");
+			}else{
+				map->map_scale=pow(2,map->map_scale)+1;
 				strcat(map->map,map_name);
 				strcat(map->map,".mapdat");
+				rewind(fmap);
 				fprintf(fmap,"%3d\t",number+1);
-				for(i=0;i<number;i++)
+				rewind(fmap);
+				fscanf(fmap,"%3d\t",&number);
+				for(i=0;i<number-1;i++)
 					fscanf(fmap,"%s\t",file_name);
-				strcpy(file_name,map_name);
-				fprintf(fmap,"%s\t",file_name);
+				fprintf(fmap,"%s\t",map_name);
+				fclose(fmap);
 				*flag=10;
 				return ;
-			}else{
-				PrintHZ16(225,210,"有重要信息未填写",0xffff,1,1);
-				getch();
-				ReadPartBMP(225,210,225,210,400,60,"back\\makeMap.bmp");
-				
 			}
-			
 		}
-		if(Button(40,50,110,115))
-		{
+			if(Button(40,50,110,115))
+			{
 			*flag=4;
 			return;
-		}
+			}
+	
 	}
+		
+	
 }
 /**************************************************************************
 功能说明：选择界面初始化
@@ -925,8 +965,37 @@ void AddLog(Account *account,char *log)
 	fscanf(flog,"%3d\t",&number);
 	for(i=0;i<number;i++)
 		fscanf(flog,"%s\t",temp);
-	fscanf(flog,"%s\t",log);
+	fprintf(flog,"%s\t",log);
 	rewind(flog);
 	fprintf(flog,"%3d\t",number+1);
 	fclose(flog);
 }		
+int IsFileExisted(Account *account,char *file_name)
+{
+	int number,temp;
+	int i;
+	FILE *fmap;
+	char file_name1[MAXLEN];//要显示的file_name 
+	char path[MAXLEN*4];
+	strcpy(path,BASEDIR);
+	strcat(path,"account\\");
+	strcat(path,account->user_name);
+	strcat(path,"\\map.list");	//格式为%3d\t%s\t%s\t.....
+	fmap=fopen(path,"r+");
+	if(fmap==NULL)
+	{
+		fmap=fopen(path,"w+");
+		fprintf(fmap,"%3d\t",0);
+		number=0;
+	}else 
+		fscanf(fmap,"%3d\t",&number);//number存储地图的数目
+	rewind(fmap);
+	fscanf(fmap,"%3d\t",&temp);
+	for(i=0;i<number;i++)
+	{
+		fscanf(fmap,"%s\t",file_name1);
+		if(strcmp(file_name1,file_name)==0)
+			return 1;
+	}
+	return 0;
+}

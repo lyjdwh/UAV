@@ -29,6 +29,7 @@ void AddAccount(Account p)
 	char path[MAXLEN*2];
 	char dir[MAXLEN*2];
 	fp = fopen(USERFILE, "r+");
+	
 	if (fp == NULL)
 	{	
 		

@@ -7,12 +7,12 @@
 
 
 /******获取顶点的数据，辅助函数*****/
-void LoadAnglePoint(
-					LOCATION *angle , 
-					const int x , 
-					const int y , 
-					const int height 
-					);
+void LoadAnglePoint(LOCATION *angle , const int x , const int y , const int height );
+					
+					
+					
+					
+					
 /*******
 将地形图的高程数据存入文件
 文件为一行，末尾储存地形的规模（map_scale）以及精细度（precision）

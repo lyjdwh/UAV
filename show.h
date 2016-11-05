@@ -29,4 +29,5 @@ void MakeMapInit();
 void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account);
 void AddLog(Account *account,char *log);
 void DeleteMap(Account *account);
+int IsFileExisted(Account *account,char *file_name);
 #endif
