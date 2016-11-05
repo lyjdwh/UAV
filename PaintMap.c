@@ -180,7 +180,7 @@ void PaintMap(
 	*******/
     if(angle_point != 90)
     {
-		load_y_loop += load_y_loop * element_cos; //实际情况：当视角变化时看到的范围也有变化
+		load_y_loop += load_y_loop * element_sin; //实际情况：当视角变化时看到的范围也有变化
 	    for(loop_y = 0 ; loop_y < load_y_loop ; loop_y++)
 		{
 			int loop_y_temp = loop_y * load_size;
@@ -1140,7 +1140,7 @@ int MouseProcess(
 			(*flag) = 2;
 			fclose(delete_map);
 			DeleteMap(account);
-			AddLog(account , "Delete A Map Data!");
+			AddLog(account , "Delete");
 			return 2;
 		}
 		if(Button(483,510,588,550)==1)//帮助
@@ -1225,6 +1225,7 @@ char ReadOrder(
 	srand((unsigned int)time(NULL));		  
 	map=fopen(str , "rb");
 	storage.flag = 0;
+	AddLog(account , "Read");
 	
 	while(1)
 	{
@@ -1293,6 +1294,10 @@ char ReadOrder(
 				}
 			}
 			else
+			if((*return_flag) == 13)
+				while((ch == 'q') || (ch == 'Q'))
+					ch = getch();
+			else 
 				ch = getch();
 			switch(ch)
 			{
