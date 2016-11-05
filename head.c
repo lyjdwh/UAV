@@ -81,10 +81,11 @@ void main()
 		if(flag==10)											//地图显示页面
 		{
 			ConstructeMap(map.map_scale,map.virtual_point,map.precison,&(map.height),map.map);
+			AddLog(&account , "ADD");
 			AddInformation(&(map.map_scale) , &(map.precison) , map.map);
 			StartSmooth(map.map, map.map_scale , 1 ,7);
 			StartMidValue(map.map, map.map_scale , 1 , 3); 
-//			//StartAddCity(map.map , map.map_scale , 1 , 15);
+			//StartAddCity(map.map , map.map_scale , 1 , 7);
 			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);						
 		}
 		if(flag==11)											//选择页面
@@ -97,7 +98,11 @@ void main()
 			ReadInformation(&(map.map_scale) , &(map.precison) , map.map);
 			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);	
 		}
-
+		if(flag == 13)
+		{
+			ReadInformation(&(map.map_scale) , &(map.precison) , ".\\account\\City.Map");
+			ReadOrder(map.map_scale , map.precison , ".\\account\\City.Map" , &flag , &account);	
+		}
 	}
 }
 /*

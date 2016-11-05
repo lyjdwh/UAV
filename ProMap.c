@@ -189,25 +189,18 @@ void AddCity(
 			for(loop = 0 ; loop < scale ; loop++)
 				for(loop_p = - half_scale ; loop_p < half_scale + 1 ; loop_p++)
 					average = ((float)p[loop][loop_x + loop_p])/ temp_scale; 
-		}
-		
-		for(loop_x = half_scale ; loop_x < loop_x_temp ; loop_x++)
-		{
 			for(loop = 0 ; loop < scale ; loop++)
 				for(loop_p = - half_scale ; loop_p < half_scale + 1 ; loop_p++)
 					s_deviation += ((float)p[loop][loop_x + loop_p] - average)*((float)p[loop][loop_x + loop_p] - average); 
-		}
 		
 		s_deviation = sqrt(s_deviation / (scale * scale));
 		
-		if(s_deviation < 5000)
-			for(loop_x = half_scale ; loop_x < loop_x_temp ; loop_x++)
-			{
-				for(loop = 0 ; loop < scale ; loop++)
+		if(s_deviation < 60)
+			for(loop = 0 ; loop < scale ; loop++)
 					for(loop_p = - half_scale ; loop_p < half_scale + 1 ; loop_p++)
-						p[loop][loop_x + loop_p] = 0xb312; 
-			}
-			
+						p[loop][loop_x + loop_p] = 0xd6b5; 
+		}
+		
 		for(loop_p = 0 ; loop_p < half_scale ; loop_p++)
 			if(loop_y == loop_p)
 				fwrite(p[loop_p] , map_scale_temp , 1 , new_map);
