@@ -85,7 +85,7 @@ void main()
 			AddInformation(&(map.map_scale) , &(map.precison) , map.map);
 			StartSmooth(map.map, map.map_scale , 1 ,7);
 			StartMidValue(map.map, map.map_scale , 1 , 3); 
-			StartAddCity(map.map , map.map_scale , 1 , 7);
+			//StartAddCity(map.map , map.map_scale , 1 , 7);
 			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);						
 		}
 		if(flag==11)											//选择页面
