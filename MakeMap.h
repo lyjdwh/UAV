@@ -74,8 +74,8 @@ void LoadMap(const unsigned int map_scale , //地形图规模
 将生成的地形图精度规模信息填入文件末尾
 ****/
 void AddInformation(
-			 	   unsigned int map_scale , 
-				   char precision , 
+			 	   unsigned int *map_scale , 
+				   char *precision , 
 				   const char *map_str
 				   );
 /*****
