@@ -203,15 +203,16 @@ void LoadMap(const unsigned int map_scale , //地形图规模
 将生成的地形图精度规模信息填入文件末尾
 ****/
 void AddInformation(
-			 	   unsigned int map_scale , 
-				   char precision , 
+			 	   unsigned int *map_scale , 
+				   char *precision , 
 				   const char *map_str
 				   )
 {
 	FILE *map;
 	map = fopen(map_str , "ab+");
-	fwrite(&map_scale , sizeof(int) , 1 , map);
-	fwrite(&precision , sizeof(int) , 1 , map);
+	fseek(map , 0l , 2);
+	fwrite(map_scale , sizeof(int) , 1 , map);
+	fwrite(precision , sizeof(char) , 1 , map);
 	fclose(map);
 }
 
@@ -249,8 +250,6 @@ void ConstructeMap(
 	InitialMap(map_scale,height[0],height[1],height[2],height[3],map,ang);
 	
 	DiamondSquare(map_scale,virtual_point,diamond,precision,ang[0],ang[1],ang[2],ang[3],map);
-	
-	AddInformation(map_scale , precision , map);
 
 	DisplayStatus("构建地形完毕！！！",".\\back\\BkImg.bmp",340,200);
 	

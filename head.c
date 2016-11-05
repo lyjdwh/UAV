@@ -81,10 +81,10 @@ void main()
 		if(flag==10)											//地图显示页面
 		{
 			ConstructeMap(map.map_scale,map.virtual_point,map.precison,&(map.height),map.map);
+			AddInformation(&(map.map_scale) , &(map.precison) , map.map);
 			StartSmooth(map.map, map.map_scale , 1 ,7);
 			StartMidValue(map.map, map.map_scale , 1 , 3); 
-			//StartAddCity(map.map , map.map_scale , 1 , 15);
-			ReadInformation(&(map.map_scale) , &(map.precison) , map.map);
+//			//StartAddCity(map.map , map.map_scale , 1 , 15);
 			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);						
 		}
 		if(flag==11)											//选择页面

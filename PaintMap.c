@@ -1140,7 +1140,7 @@ int MouseProcess(
 			(*flag) = 2;
 			fclose(delete_map);
 			DeleteMap(account);
-			AddLog(account , "Delete A Map Data!删除了一个文件！");
+			AddLog(account , "Delete A Map Data!");
 			return 2;
 		}
 		if(Button(483,510,588,550)==1)//帮助
@@ -1302,9 +1302,11 @@ char ReadOrder(
 						{
 							case 0:
 								(*return_flag) = 8;
+								fclose(map); 
 								return 0;
 								break;
 							case 2:
+								fclose(map);
 								(*return_flag) = 8;
 								return 0;
 								break;
@@ -1475,7 +1477,7 @@ void ReadInformation(
 {
 	FILE *map;
 	map = fopen(map_str , "ab+");
-	fseek(map , (long)(sizeof(int) + sizeof(char)) , 2);
+	fseek(map , -(long)(sizeof(int) + sizeof(char)) , 2);
 	fread(map_scale , sizeof(int) , 1 , map);
 	fread(precision , sizeof(char) , 1 , map);
 	fclose(map);

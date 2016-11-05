@@ -89,11 +89,11 @@ void SmoothMap(
 	
 	/******将地形图复制到平滑化后的地形图文件尾*******/
 	fseek(new_map , 0l , 2);
-	fseek(map , (long)(sizeof(int) + sizeof(char)) , 2);
+	fseek(map , -(long)(sizeof(int) + sizeof(char)) , 2);
 	fread(info_scale , sizeof(int) , 1 , map);
-	fwrite(info_scale , sizeof(int) , 1 , map);
+	fwrite(info_scale , sizeof(int) , 1 , new_map);
 	fread(info_precision , sizeof(char) , 1 , map);
-	fwrite(info_precision , sizeof(char) , 1 , map);
+	fwrite(info_precision , sizeof(char) , 1 , new_map);
 	free(info_precision);
 	free(info_scale);
 }
@@ -138,11 +138,11 @@ void CopyMap(
 	
 	/******将地形图复制到平滑化后的地形图文件尾*******/
 	fseek(new_map , 0l , 2);
-	fseek(map , (long)(sizeof(int) + sizeof(char)) , 2);
+	fseek(map , -(long)(sizeof(int) + sizeof(char)) , 2);
 	fread(info_scale , sizeof(int) , 1 , map);
-	fwrite(info_scale , sizeof(int) , 1 , map);
+	fwrite(info_scale , sizeof(int) , 1 , new_map);
 	fread(info_precision , sizeof(char) , 1 , map);
-	fwrite(info_precision , sizeof(char) , 1 , map);
+	fwrite(info_precision , sizeof(char) , 1 , new_map);
 	free(info_precision);
 	free(info_scale);
 } 
@@ -231,11 +231,11 @@ void AddCity(
 	
 	/******将地形图复制到平滑化后的地形图文件尾*******/
 	fseek(new_map , 0l , 2);
-	fseek(map , (long)(sizeof(int) + sizeof(char)) , 2);
+	fseek(map , -(long)(sizeof(int) + sizeof(char)) , 2);
 	fread(info_scale , sizeof(int) , 1 , map);
-	fwrite(info_scale , sizeof(int) , 1 , map);
+	fwrite(info_scale , sizeof(int) , 1 , new_map);
 	fread(info_precision , sizeof(char) , 1 , map);
-	fwrite(info_precision , sizeof(char) , 1 , map);
+	fwrite(info_precision , sizeof(char) , 1 , new_map);
 	free(info_precision);
 	free(info_scale);
 }
@@ -334,11 +334,11 @@ void MidValueMap(
 	
 	/******将地形图复制到平滑化后的地形图文件尾*******/
 	fseek(new_map , 0l , 2);
-	fseek(map , (long)(sizeof(int) + sizeof(char)) , 2);
+	fseek(map , -(long)(sizeof(int) + sizeof(char)) , 2);
 	fread(info_scale , sizeof(int) , 1 , map);
-	fwrite(info_scale , sizeof(int) , 1 , map);
+	fwrite(info_scale , sizeof(int) , 1 , new_map);
 	fread(info_precision , sizeof(char) , 1 , map);
-	fwrite(info_precision , sizeof(char) , 1 , map);
+	fwrite(info_precision , sizeof(char) , 1 , new_map);
 	free(info_precision);
 	free(info_scale);
 }
