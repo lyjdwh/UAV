@@ -12,7 +12,11 @@
 #include "SVGA.h"
 #include "show.h"
 #include "mouse.h"
-#include "button.h"
+#include "button.h"	
+#include "PaintMap.h" 
+#include "InfoShow.h"
+#include "MakeMap.h"
+#include "ProMap.h"
 
 
 
@@ -76,14 +80,23 @@ void main()
 		}
 		if(flag==10)											//地图显示页面
 		{
-			exit(1);						
+			ConstructeMap(map.map_scale,map.virtual_point,map.precison,&(map.height),map.map);
+			StartSmooth(map.map, map.map_scale , 1 ,7);
+			StartMidValue(map.map, map.map_scale , 1 , 3); 
+			//StartAddCity(map.map , map.map_scale , 1 , 15);
+			ReadInformation(&(map.map_scale) , &(map.precison) , map.map);
+			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);						
 		}
 		if(flag==11)											//选择页面
 		{
 			ChooseInit();
 			ChooseCheck(&para,&account,&flag);
 		}
-
+		if(flag == 12)
+		{
+			ReadInformation(&(map.map_scale) , &(map.precison) , map.map);
+			ReadOrder(map.map_scale , map.precison , map.map , &flag , &account);	
+		}
 
 	}
 }
