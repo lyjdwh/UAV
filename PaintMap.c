@@ -180,7 +180,7 @@ void PaintMap(
 	*******/
     if(angle_point != 90)
     {
-		load_y_loop += load_y_loop * element_sin; //实际情况：当视角变化时看到的范围也有变化
+		//load_y_loop += load_y_loop * element_sin; //实际情况：当视角变化时看到的范围也有变化
 	    for(loop_y = 0 ; loop_y < load_y_loop ; loop_y++)
 		{
 			int loop_y_temp = loop_y * load_size;

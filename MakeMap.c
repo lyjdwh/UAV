@@ -197,6 +197,7 @@ void LoadMap(const unsigned int map_scale , //地形图规模
 	{
 		fwrite(input , map_scale_temp , 1 , map);
 	}
+	free(input);
 }
 
 /***

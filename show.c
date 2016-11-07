@@ -25,13 +25,13 @@
 void UAVInit(UAVPara *para,UAVMap *map)
 {
 
-	SetSVGAMode(0x113);
-	SetScreenWidth(800L);
-	MouseInit();
-	SetMouseRange(0,0,800,600);
-	SetMousePosition(400,300);
-	para->mouse_buffer=(short *)malloc(32*16);
-	map->virtual_point=0;
+	SetSVGAMode(0x113);						//设置SVGA模式
+	SetScreenWidth(800L);					//设置屏幕虚拟宽度	
+	MouseInit();							//初始化鼠标
+	SetMouseRange(0,0,800,600);				//设置鼠标移动范围
+	SetMousePosition(400,300);				//设置鼠标初始位置
+	para->mouse_buffer=(short *)malloc(32*16);//为鼠标申请内存空间
+	map->virtual_point=0;					//地图虚拟点为0
 
 	if(para->mouse_buffer==NULL)
 	{
@@ -135,11 +135,11 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 		MouseCopy(&mouse,para->mouse_buffer);
 		MouseShow(&mouse);
 		MouseReshow(&mouse,para->mouse_buffer);
-		TextBox(235,180,455,215,account->user_name,1,"register");
+		TextBox(235,180,455,215,account->user_name,1,"register");//文本框
 		TextBox(235,230,455,265,account->password,0,"register");
 		TextBox(235,285,455,320,temp.password,0,"register");
 		TextBox(235,340,455,380,account->email,1,"register");
-		if(Button(90,425,430,465)==1)
+		if(Button(90,425,430,465)==1)		//注册并进入系统 
 		{
 			SearchName(account);
 			if(account->message==4)
@@ -163,13 +163,13 @@ void RegisterCheck(UAVPara *para,Account *account,int *flag)
 
 
 		}
-		if(Button(90,500,230,535)==1)
+		if(Button(90,500,230,535)==1)		//帮助
 		{
 			HelpInit("register");
 			HelpCheck("register",flag) ;
 			return;
 		}
-		if(Button(280,500,425,535)==1)
+		if(Button(280,500,425,535)==1)		//返回登录界面
 		{
 			*flag=1;
 			return;
@@ -212,12 +212,12 @@ void Forget1Check(UAVPara *para,Account *account,int *flag)
 		TextBox(224,205,445,240,account->user_name,1,"forget");
 		TextBox(224,260,445,295,temp.email,1,"forget");
 		
-		if(Button(295,485,440,525)==1)
+		if(Button(295,485,440,525)==1)		//注册
 		{
 			*flag=2;
 			return ;
 		}
-		if(Button(105,350,440,390)==1)
+		if(Button(105,350,440,390)==1)		//下一步
 		{	SearchAccount(account);
 			if(account->message==2)
 			{
@@ -239,12 +239,12 @@ void Forget1Check(UAVPara *para,Account *account,int *flag)
 			}
 			
 		}
-		if(Button(105,420,440,455)==1)
+		if(Button(105,420,440,455)==1)		//返回登录
 		{
 			*flag=1;
 			return;
 		}
-		if(Button(105,485,240,525)==1)
+		if(Button(105,485,240,525)==1)		//帮助
 		{
 			HelpInit("forget1");
 			HelpCheck("forget1",flag);
@@ -288,7 +288,7 @@ void Forget2Check(UAVPara *para,Account *account,int *flag)
 		MouseReshow(&mouse,para->mouse_buffer);
 		TextBox(225,205,450,240,account->password,0,"forget1");
 		TextBox(225,260,450,300,temp.password,0,"forget1");
-		if(Button(105,348,440,385)==1)
+		if(Button(105,348,440,385)==1)				//确认修改并进入系统
 		{
 			
 			if(strcmp(account->password,temp.password)!=0)
@@ -305,18 +305,18 @@ void Forget2Check(UAVPara *para,Account *account,int *flag)
 				return;
 			}
 		}
-		if(Button(105,415,440,455)==1)
+		if(Button(105,415,440,455)==1)			//返回登录
 		{
 			*flag=1;
 			return;
 		}
-		if(Button(105,485,240,525)==1)
+		if(Button(105,485,240,525)==1)			//帮助
 		{
 			HelpInit("forget2");
 			HelpCheck("forget2",flag);
 			return;
 		}
-		if(Button(290,490,440,525)==1)
+		if(Button(290,490,440,525)==1)			//注册
 		{
 			*flag=2;
 			return;
@@ -346,7 +346,7 @@ void HelpInit(char *page)
 	}else if(strcmp(page,"main")==0)	//主页面的帮助界面
 	{
 		ReadBmp(0,0,"back\\HelpC.bmp");
-	}else if(strcmp(page,"make_map")==0)	//主页面的帮助界面
+	}else if(strcmp(page,"make_map")==0)	
 	{
 		ReadBmp(0,0,"back\\HelpS.bmp");//生成地图的帮助页面
 	}
@@ -373,31 +373,33 @@ void HelpCheck(char *page,int *flag)
 		MouseShow(&mouse);
 		MouseReshow(&mouse,mouse_buffer);
 		
-			if(Button(40,50,110,115)==1)
+			if(Button(40,50,110,115)==1)			//登录的帮助页面
 			{
 				if(strcmp(page,"login")==0)
 			{
 				*flag=1;
 				break;
-			} else if(strcmp(page,"register")==0){
+			} else if(strcmp(page,"register")==0){	//注册的帮助页面
 				*flag=2;
 				break;
-			}else if(strcmp(page,"forget1")==0)
+			}else if(strcmp(page,"forget1")==0)		//忘记密码1的帮助页面
 			{			
 				break;
-			}else if(strcmp(page,"forget2")==0)
+			}else if(strcmp(page,"forget2")==0)		//忘记密码2的帮助页面
 			{
 				*flag=6;
 				break;
-			}else if(strcmp(page,"make_map")==0)
+			}else if(strcmp(page,"make_map")==0)	//主页面的帮助界面
+	
 			{
 				*flag=8;
 				break;
-			}else if(strcmp(page,"main")==0)
+			}else if(strcmp(page,"main")==0)		//生成地图的帮助页面
 			{
 				*flag=4;
 				break;
 			}
+		
 		
 		}
 	}
@@ -447,7 +449,7 @@ void ErrorCheck()
 		MouseCopy(&mouse,mouse_buffer);
 		MouseShow(&mouse);
 		MouseReshow(&mouse,mouse_buffer);
-		if (Button(540,210,580,253)==1)//320,2,360,45
+		if (Button(540,210,580,253)==1)//320,2,360,45	//返回
 		{
 			break;
 		}
@@ -482,20 +484,20 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 	Account temp;
 	FILE *fmap,*flog;
 	int number;
-	char path[MAXLEN*3],path1[MAXLEN*3],dir[MAXLEN*3];
-	strcpy(path,BASEDIR);
+	char path[MAXLEN*2],path1[MAXLEN*2],dir[MAXLEN*2];
+	strcpy(path,BASEDIR);					//path :用户地图列表地址
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
 	strcat(path,"\\map.list");
-	strcpy(path,BASEDIR);
+	strcpy(path1,BASEDIR);					//path1:用户日志地址
 	strcat(path1,"account\\");
 	strcat(path1,account->user_name);
 	strcat(path1,"\\log.dat");
-	strcpy(path,BASEDIR);
+	strcpy(dir,BASEDIR);					//dir:专属用户文件夹
 	strcat(dir,"account\\");
 	strcat(dir,account->user_name);
-	mkdir(dir);
-	if(fopen(path,"r+")==NULL)
+	mkdir(dir);								//生成用户文件夹
+	if(fopen(path,"r+")==NULL)				//如果没有此文件就生成并初始化
 	{
 		fmap=fopen(path,"w");
 		rewind(fmap);
@@ -503,7 +505,7 @@ void MainCheck(UAVPara *para,Account *account,int *flag)
 		fclose(fmap);
 	}
 		
-	if(fopen(path1,"r+")==NULL)
+	if(fopen(path1,"r+")==NULL)				//如果没有此文件就生成并初始化
 	{
 		flog=fopen(path1,"w");
 		rewind(flog);
@@ -581,19 +583,19 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 	Coord mouse;
 	int page=1;
 	int new_page=1;
-	int number;
-	int page_number=0;
+	int number;					//用户地图数目
+	int page_number=0;			//页面数目
 	int i,n=5;
 	int show_number=0;//显示的数目
-	int showed_number=0;
+	int showed_number=0;		//已经显示的数目
 	int perpage_number=0;//每一页显示的数目
-	int postpage_number=0;
+	int postpage_number=0;		//上一页已经显示的数目
 	char mouse_butt;
 	Account temp;
 	FILE *fmap;
 	char file_name[MAXLEN];//要显示的file_name 
 	char file_name1[MAXLEN];//要打开的file_name
-	char path[MAXLEN*4];
+	char path[MAXLEN*3];
 	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
@@ -612,7 +614,7 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 
 	page_number=1+number/(n*2);
 	show_number=(number-showed_number)/n==0?(number-showed_number)%n:n;
-	for(i=0;i<showed_number;i++)
+	for(i=0;i<showed_number;i++)	//文件指针移动到要显示的位置
 		fscanf(fmap,"%s\t",file_name);
 	for(i=0;i<show_number;i++)
 	{
@@ -643,9 +645,9 @@ void OpenMapCheck(UAVPara *para,Account *account,int *flag,UAVMap *map)
 			return;
 		}
 		
-		if(page>1&&Button(190,435,290,470)==1)
+		if(page>1&&Button(190,435,290,470)==1)			//若当前页面大于1则可以上一页
 			new_page--;
-		if(page<page_number&&Button(510,435,610,470)==1)
+		if(page<page_number&&Button(510,435,610,470)==1)//如果当前页面数大于总页面数则可以下一页
 			new_page++;
 		if(page!=new_page)
 		{
@@ -721,8 +723,8 @@ void LogCheck(UAVPara *para,Account *account,int *flag)
 	char mouse_butt;
 	Account temp;
 	FILE *log;
-	char path[MAXLEN*3];
-	char content[MAXLEN*3];//log 内容
+	char path[MAXLEN*2];
+	char content[MAXLEN*2];//log 内容
 	int page=1;
 	int new_page=1;
 	int n=5,i;
@@ -829,7 +831,7 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 	Coord mouse;
 	FILE *fmap;
 	char mouse_butt;
-	char path[MAXLEN*3];
+	char path[MAXLEN*2];
 	char map_scale[20]={""};
 	char precison[20]={""};
 	char virtual_point[20]={""};
@@ -854,6 +856,8 @@ void MakeMapCheck(UAVPara *para,UAVMap *map,int *flag,Account *account)
 		number=0;
 	}else 
 		fscanf(fmap,"%3d\t",&number);//number存储地图的数目
+	fclose(fmap);
+	fmap=fopen(path,"r+");
 	rewind(fmap);
 	while(1)
 	{
@@ -998,7 +1002,7 @@ void DeleteMap(Account *account)
 **************************************************************************/
 void AddLog(Account *account,char *log)
 {
-	char path[MAXLEN*4];
+	char path[MAXLEN*2];
 	char temp[MAXLEN*2];
 	int number,i;
 	FILE *flog;
@@ -1030,7 +1034,7 @@ int IsFileExisted(Account *account,char *file_name)
 	int i;
 	FILE *fmap;
 	char file_name1[MAXLEN];//要显示的file_name 
-	char path[MAXLEN*4];
+	char path[MAXLEN*2];
 	strcpy(path,BASEDIR);
 	strcat(path,"account\\");
 	strcat(path,account->user_name);
